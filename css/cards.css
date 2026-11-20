@@ -74,12 +74,15 @@
 .d-bold.t-cover .c-avatar { background: #111; }
 
 /* 마무리 */
-.d-bold.t-outro { background: var(--tint1); color: #111; }
-.d-bold.t-outro .dk2 { color: var(--tint2); }
-.d-bold.t-outro .c-label { background: var(--accent); color: var(--on-accent); }
-.d-bold.t-outro .c-rule { background: var(--accent); }
-.d-bold.t-outro .c-body { color: #3a3a3a; }
+/* 마지막 장: 표지와 짝을 이루도록 강조색으로 꽉 채움 (카드별 강조색으로 표지와 다른 색 가능) */
+.d-bold.t-outro { background: var(--accent); color: var(--on-accent); }
+.d-bold.t-outro .dk1 { background: #111; }
+.d-bold.t-outro .c-label { background: var(--on-accent); color: var(--accent); }
+.d-bold.t-outro .c-rule { background: var(--on-accent); }
+.d-bold.t-outro .c-body { color: var(--on-accent); font-weight: 600; opacity: 0.92; }
 .d-bold.t-outro .c-title { font-size: calc(var(--fs) * 112px); }
+.d-bold.t-outro .c-title .hl { background: #111; color: var(--accent); padding: 0 0.1em; }
+.d-bold.t-outro .c-avatar { background: #111; }
 
 /* ==========================================================
    2) 에디토리얼 — 매거진 같은 세리프 · 얇은 괘선

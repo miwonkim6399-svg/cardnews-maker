@@ -633,6 +633,7 @@
     if (!st().cards.length && !st().updatedAt) {
       st().topic = SAMPLE_TOPIC;
       const r = window.Generator.generate({ topic: SAMPLE_TOPIC, tone: st().tone, count: st().count });
+      r.cards[r.cards.length - 1].accent = "#2f6bff"; // 예시: 주황 표지와 짝을 이루는 파란 마지막 장
       st().cards = r.cards;
       st().caption = window.Generator.caption(st());
       S.save();
