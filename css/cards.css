@@ -31,7 +31,7 @@
 .card .c-top, .card .c-main, .card .c-foot { position: relative; z-index: 1; }
 .card .c-top { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex: none; }
 .card .c-main { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
-.card .c-foot { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex: none; }
+.card .c-foot { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex: none; margin-top: 40px; }
 .card .c-title { margin: 0; white-space: pre-line; }
 .card .c-body { margin: 0; white-space: pre-line; }
 .card .c-label:empty, .card .c-body:empty, .card .c-title:empty { display: none; }
