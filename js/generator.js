@@ -188,7 +188,7 @@
   }
 
   /* ---------- 캡션 ---------- */
-  const STOP_SUFFIX = /(은|는|이|가|을|를|의|에|에서|로|으로|와|과|도|만|하는|하기|법|방법)$/;
+  const STOP_WORDS = ["방법", "하는법", "이것", "모든", "정말", "진짜"];
   const GENERIC_TAGS = ["카드뉴스", "정보공유", "꿀팁", "인스타카드뉴스", "저장필수", "알아두면좋은정보"];
 
   function hashtags(topic, extra) {
@@ -198,11 +198,14 @@
       if (tag.length >= 2 && tag.length <= 24 && !tags.includes(tag)) tags.push(tag);
     };
     const t = (topic || "").trim();
-    if (t) add(t.replace(/\s+/g, ""));
-    t.split(/[\s,·/|]+/).forEach((w) => {
-      const base = w.replace(/[^0-9A-Za-z가-힣]/g, "");
-      if (base.length >= 2) add(base.length > 2 ? base.replace(STOP_SUFFIX, "") || base : base);
-    });
+    // 명사로 보이는 단어만 남김: '만드는', '내리기' 같은 동사형과 '법', '방법'은 제외
+    const words = t.split(/[\s,·/|]+/)
+      .map((w) => w.replace(/[^0-9A-Za-z가-힣]/g, "").replace(/(을|를|의|에서|에|으로|와|과|도)$/, ""))
+      .filter((w) => w.length >= 2 && !/(는|은|하기|하게|하는|기|게|법)$/.test(w) && !STOP_WORDS.includes(w));
+    const compact = t.replace(/\s+/g, "");
+    if (compact.length <= 10 && words.length === t.split(/\s+/).length) add(compact);
+    for (let i = 0; i < words.length - 1; i++) add(words[i] + words[i + 1]); // 예: 아침+루틴 → #아침루틴
+    words.forEach(add);
     (extra || []).forEach(add);
     GENERIC_TAGS.forEach(add);
     return tags.slice(0, 15).map((x) => "#" + x);
