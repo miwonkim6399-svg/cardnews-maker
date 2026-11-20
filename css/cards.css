@@ -74,11 +74,11 @@
 .d-bold.t-cover .c-avatar { background: #111; }
 
 /* 마무리 */
-.d-bold.t-outro { background: #111; color: #fff; }
-.d-bold.t-outro .dk2 { color: #1d1d1d; }
+.d-bold.t-outro { background: var(--tint1); color: #111; }
+.d-bold.t-outro .dk2 { color: var(--tint2); }
 .d-bold.t-outro .c-label { background: var(--accent); color: var(--on-accent); }
 .d-bold.t-outro .c-rule { background: var(--accent); }
-.d-bold.t-outro .c-body { color: #cfcfcf; }
+.d-bold.t-outro .c-body { color: #3a3a3a; }
 .d-bold.t-outro .c-title { font-size: calc(var(--fs) * 112px); }
 
 /* ==========================================================
@@ -111,8 +111,8 @@
   background: var(--accent); align-self: flex-end; margin-bottom: auto;
 }
 
-.d-edit.t-outro { background: #1e1b16; color: #f3eee4; }
-.d-edit.t-outro .c-body { color: #cfc7b8; }
+.d-edit.t-outro { background: var(--tint1); color: #1e1b16; }
+.d-edit.t-outro .c-body { color: #3d382e; }
 .d-edit.t-outro .c-main { justify-content: center; }
 
 /* ==========================================================
