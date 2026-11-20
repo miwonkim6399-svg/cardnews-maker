@@ -1,0 +1,161 @@
+/* ==========================================================
+   카드 디자인 (모든 카드는 가로 1080px 원본 크기로 그려지고
+   미리보기에서는 transform: scale 로 축소됩니다)
+   html2canvas 로 그대로 이미지화되므로 지원되는 CSS만 사용합니다.
+   ========================================================== */
+.card {
+  --fs: 1;                 /* 글자 크기 자동 맞춤 배율 (render.js) */
+  --accent: #ff5a36;
+  --on-accent: #ffffff;
+  --tint1: #fff4f0;
+  --tint2: #ffe0d6;
+  --tint3: #ffc2ae;
+  --pad-x: 96px;
+  --pad-y: 88px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: var(--pad-y) var(--pad-x);
+  font-family: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+.card.r-916 { --pad-y: 210px; }   /* 스토리 상하단 UI 안전영역 */
+.card.r-11 { --pad-y: 76px; }
+
+.card .c-deco { position: absolute; inset: 0; pointer-events: none; }
+.card .c-deco span { position: absolute; display: block; }
+.card .c-top, .card .c-main, .card .c-foot { position: relative; z-index: 1; }
+.card .c-top { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex: none; }
+.card .c-main { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.card .c-foot { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex: none; }
+.card .c-title { margin: 0; white-space: pre-line; }
+.card .c-body { margin: 0; white-space: pre-line; }
+.card .c-label:empty, .card .c-body:empty, .card .c-title:empty { display: none; }
+.card .c-avatar { display: inline-block; flex: none; }
+.card .c-acc { display: inline-flex; align-items: center; gap: 16px; }
+
+/* ==========================================================
+   1) 볼드탑 — 굵은 제목이 위에서 강하게 치고 들어오는 스타일
+   ========================================================== */
+.d-bold { background: #ffffff; color: #111111; }
+.d-bold .dk1 { left: 0; right: 0; top: 0; height: 24px; background: var(--accent); }
+.d-bold .dk2 { right: -40px; bottom: -80px; font-size: 520px; font-weight: 900; line-height: 1; color: #f2f0eb; letter-spacing: -0.06em; }
+.d-bold .c-top { margin-top: 12px; }
+.d-bold .c-label {
+  display: inline-block; background: #111; color: #fff;
+  font-size: 30px; font-weight: 800; letter-spacing: 0.02em;
+  padding: 12px 24px 13px; line-height: 1.1;
+}
+.d-bold .c-page { font-size: 30px; font-weight: 800; letter-spacing: 0.02em; }
+.d-bold .c-main { padding-top: 64px; }
+.d-bold .c-num { font-size: calc(var(--fs) * 190px); font-weight: 900; line-height: 0.9; letter-spacing: -0.05em; color: var(--accent); margin-bottom: 36px; }
+.d-bold .c-title { font-size: calc(var(--fs) * 100px); font-weight: 900; line-height: 1.2; letter-spacing: -0.045em; }
+.d-bold .c-rule { width: 120px; height: 12px; background: #111; margin: calc(var(--fs) * 56px) 0 calc(var(--fs) * 48px); flex: none; }
+.d-bold .c-body { font-size: calc(var(--fs) * 42px); font-weight: 500; line-height: 1.62; color: #3a3a3a; letter-spacing: -0.02em; }
+.d-bold .hl { color: var(--accent); }
+.d-bold .c-account { font-size: 32px; font-weight: 800; letter-spacing: -0.01em; }
+.d-bold .c-avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--accent); }
+.d-bold .c-swipe { font-size: 28px; font-weight: 800; letter-spacing: 0.02em; }
+
+/* 표지 */
+.d-bold.t-cover { background: var(--accent); color: var(--on-accent); }
+.d-bold.t-cover .dk1 { background: #111; height: 24px; }
+.d-bold.t-cover .dk2 { color: rgba(0, 0, 0, 0.08); }
+.d-bold.t-cover .c-label { background: var(--on-accent); color: var(--accent); }
+.d-bold.t-cover .c-main { padding-top: 80px; }
+.d-bold.t-cover .c-title { font-size: calc(var(--fs) * 138px); line-height: 1.12; letter-spacing: -0.055em; }
+.d-bold.t-cover .c-title .hl { background: #111; color: var(--accent); padding: 0 0.1em; }
+.d-bold.t-cover .c-rule { background: var(--on-accent); margin-top: auto; }
+.d-bold.t-cover .c-body { color: var(--on-accent); font-size: calc(var(--fs) * 46px); font-weight: 700; opacity: 0.92; }
+.d-bold.t-cover .c-avatar { background: #111; }
+
+/* 마무리 */
+.d-bold.t-outro { background: #111; color: #fff; }
+.d-bold.t-outro .dk2 { color: #1d1d1d; }
+.d-bold.t-outro .c-label { background: var(--accent); color: var(--on-accent); }
+.d-bold.t-outro .c-rule { background: var(--accent); }
+.d-bold.t-outro .c-body { color: #cfcfcf; }
+.d-bold.t-outro .c-title { font-size: calc(var(--fs) * 112px); }
+
+/* ==========================================================
+   2) 에디토리얼 — 매거진 같은 세리프 · 얇은 괘선
+   ========================================================== */
+.d-edit { background: #f3eee4; color: #1e1b16; }
+.d-edit .c-top { border-bottom: 3px solid currentColor; padding-bottom: 24px; }
+.d-edit .c-label { font-size: 26px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; }
+.d-edit .c-page { font-family: "Noto Serif KR", serif; font-size: 28px; font-weight: 600; letter-spacing: 0.04em; }
+.d-edit .c-main { padding-top: 72px; }
+.d-edit .c-num { font-family: "Noto Serif KR", serif; font-size: calc(var(--fs) * 46px); font-weight: 700; font-style: italic; color: var(--accent); margin-bottom: 30px; letter-spacing: 0.02em; }
+.d-edit .c-title { font-family: "Noto Serif KR", serif; font-size: calc(var(--fs) * 88px); font-weight: 900; line-height: 1.32; letter-spacing: -0.035em; }
+.d-edit .c-rule { width: 96px; height: 6px; background: var(--accent); margin: calc(var(--fs) * 56px) 0 calc(var(--fs) * 48px); flex: none; }
+.d-edit .c-body { font-size: calc(var(--fs) * 40px); font-weight: 450; line-height: 1.78; color: #3d382e; letter-spacing: -0.015em; }
+.d-edit .hl { color: var(--accent); }
+.d-edit .c-foot { border-top: 3px solid currentColor; padding-top: 24px; }
+.d-edit .c-account { font-size: 28px; font-weight: 700; letter-spacing: 0.06em; }
+.d-edit .c-avatar { display: none; }
+.d-edit .c-swipe { font-family: "Noto Serif KR", serif; font-style: italic; font-size: 28px; font-weight: 600; }
+.d-edit .dk1 { left: var(--pad-x); right: var(--pad-x); top: calc(var(--pad-y) - 18px); height: 1px; background: currentColor; opacity: 0.5; }
+.d-edit .dk2 { display: none; }
+
+.d-edit.t-cover .c-main { justify-content: flex-end; padding-bottom: 56px; }
+.d-edit.t-cover .c-title { font-size: calc(var(--fs) * 124px); line-height: 1.22; letter-spacing: -0.045em; }
+.d-edit.t-cover .c-body { font-family: "Noto Serif KR", serif; font-size: calc(var(--fs) * 42px); font-weight: 400; color: #4a443a; }
+/* 표지 장식 원: 흐름 안에 두어 제목과 절대 겹치지 않게 */
+.d-edit.t-cover .c-main::before {
+  content: ""; display: block; flex: none;
+  width: calc(var(--fs) * 200px); height: calc(var(--fs) * 200px); border-radius: 50%;
+  background: var(--accent); align-self: flex-end; margin-bottom: auto;
+}
+
+.d-edit.t-outro { background: #1e1b16; color: #f3eee4; }
+.d-edit.t-outro .c-body { color: #cfc7b8; }
+.d-edit.t-outro .c-main { justify-content: center; }
+
+/* ==========================================================
+   3) 소프트모던 — 파스텔 그라데이션 · 둥근 시트
+   ========================================================== */
+.d-soft { background: linear-gradient(160deg, var(--tint1) 0%, var(--tint2) 100%); color: #1f2430; --pad-x: 136px; --pad-y: 132px; }
+.d-soft.r-916 { --pad-y: 240px; }
+.d-soft.r-11 { --pad-y: 112px; }
+.d-soft .dk1 { width: 560px; height: 560px; border-radius: 50%; right: -180px; top: -200px; background: var(--tint3); opacity: 0.55; }
+.d-soft .dk2 { width: 300px; height: 300px; border-radius: 50%; left: -110px; bottom: -120px; background: var(--accent); opacity: 0.16; }
+.d-soft .dk3 {
+  left: 60px; right: 60px; top: calc(var(--pad-y) - 64px); bottom: calc(var(--pad-y) - 64px);
+  background: #ffffff; border-radius: 60px;
+  /* box-shadow 는 html2canvas 에서 둥근 모서리와 함께 깨지므로 사용하지 않음 */
+}
+.d-soft .c-label {
+  display: inline-block; background: var(--accent); color: var(--on-accent);
+  font-size: 27px; font-weight: 700; padding: 11px 28px 12px; border-radius: 999px; line-height: 1.1;
+}
+.d-soft .c-page { font-size: 26px; font-weight: 600; color: #8b8f9a; }
+.d-soft .c-main { padding-top: 60px; }
+.d-soft .c-num {
+  width: calc(var(--fs) * 100px); height: calc(var(--fs) * 100px); border-radius: 50%;
+  background: var(--tint2); color: var(--accent);
+  font-size: calc(var(--fs) * 40px); font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 40px; flex: none;
+}
+.d-soft .c-title { font-size: calc(var(--fs) * 84px); font-weight: 800; line-height: 1.3; letter-spacing: -0.04em; }
+.d-soft .c-rule { width: 64px; height: 8px; border-radius: 4px; background: var(--tint3); margin: calc(var(--fs) * 48px) 0 calc(var(--fs) * 40px); flex: none; }
+.d-soft .c-body { font-size: calc(var(--fs) * 39px); font-weight: 500; line-height: 1.72; color: #5b6170; letter-spacing: -0.02em; }
+.d-soft .hl { color: var(--accent); }
+.d-soft .c-account { font-size: 28px; font-weight: 700; color: #3a3f4c; }
+.d-soft .c-avatar { width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--tint3)); }
+.d-soft .c-swipe { font-size: 26px; font-weight: 600; color: #8b8f9a; }
+
+.d-soft.t-cover .c-main { justify-content: center; }
+.d-soft.t-cover .c-title { font-size: calc(var(--fs) * 110px); line-height: 1.22; letter-spacing: -0.05em; }
+.d-soft.t-cover .c-rule { width: 96px; background: var(--accent); }
+.d-soft.t-cover .dk1 { width: 760px; height: 760px; right: -260px; top: -300px; }
+
+.d-soft.t-outro { background: linear-gradient(160deg, var(--tint2) 0%, var(--tint3) 100%); }
+.d-soft.t-outro .c-main { justify-content: center; }
+
+/* 디자인 선택 썸네일 내부 (미니 카드) */
+.dthumb .card-holder { box-shadow: none; border-radius: 0; }

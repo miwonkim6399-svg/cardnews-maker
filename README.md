@@ -1,0 +1,79 @@
+# 아름다운 부의 정원 카드뉴스메이커
+
+주제만 입력하면 인스타그램 카드뉴스(5/7/9장)와 캡션을 자동으로 만들어 주는 웹사이트입니다.
+설치할 것이 없는 정적 사이트라서 브라우저만 있으면 됩니다.
+
+## 실행 방법
+
+| 방법 | 설명 |
+|---|---|
+| **더블클릭** | `index.html` 을 크롬/엣지로 열면 바로 사용할 수 있어요. |
+| **로컬 서버** (권장) | 이 폴더에서 `node serve.mjs` 를 실행한 뒤 http://localhost:5173 접속 |
+| **인터넷에 올리기** | 폴더 전체를 GitHub Pages · Netlify · Vercel 에 올리면 휴대폰에서도 접속할 수 있어요. (휴대폰 → 인스타그램 앱 바로 공유는 `https` 주소에서만 동작) |
+
+## 기능
+
+1. **주제 · 말투 · 카드 수 입력 → 자동 완성**
+   - 말투: 친근한 / 전문적인 / 유머러스한 / 감성적인 / 간결한
+   - 카드 수: 5 · 7 · 9장 (표지 1장 + 본문 + 마무리 1장)
+   - 생성 방식
+     - **기본 템플릿**: API 키 없이 즉시 생성 (말투별 문구 틀에 주제를 넣어 만듦)
+     - **AI 작성 (Claude)**: 설정에 Anthropic API 키를 넣으면 주제에 맞는 실제 내용으로 작성
+2. **디자인 3종**: 볼드탑 · 에디토리얼 · 소프트모던
+3. **카드별 편집**: 라벨 · 제목 · 본문 · 카드별 강조색, 계정명, 전체 강조색
+   - 제목/본문에서 `*단어*` 처럼 별표로 감싸면 강조색으로 표시
+   - 카드 순서 이동 · 추가 · 삭제 (최대 10장)
+   - 글이 길면 글자 크기가 자동으로 줄어들어 카드 안에 맞춰짐
+4. **인스타그램 캡션 자동 작성 + 복사** (글자 수 · 해시태그 개수 표시)
+5. **브라우저 자동 저장** (localStorage) · 데스크톱/태블릿/모바일 반응형
+6. **크기 비율**: 1:1 · 4:5(피드 추천) · 3:4 · 9:16(스토리) — 모든 이미지는 가로 1080px
+7. **내 인스타그램에 올리기**
+   - **휴대폰**: 공유창 → Instagram 선택 → 카드가 여러 장(캐러셀)으로 들어가고 캡션은 자동 복사
+   - **PC**: 카드 이미지 저장 + 캡션 복사 + instagram.com 열기 → "만들기"에서 이미지 선택 후 붙여넣기
+   - **자동 게시 (API)**: 버튼 한 번으로 캐러셀 + 캡션을 바로 게시 (아래 설정 필요)
+   - 그 외: 현재 카드 PNG 저장, 전체 ZIP 저장(캡션 txt 포함)
+
+## AI 작성 설정 (선택)
+
+1. https://console.anthropic.com → **API Keys** 에서 키 발급
+2. 사이트 오른쪽 위 ⚙ → **Anthropic API 키** 입력 → 저장
+3. 생성 방식에서 **AI 작성 (Claude)** 선택
+
+- 사용 모델: `claude-opus-5-5` (공식 `@anthropic-ai/sdk` 를 브라우저에서 불러와 호출)
+- 사용량만큼 Anthropic 계정에 요금이 청구됩니다.
+- 키는 이 브라우저에만 저장되고 Anthropic 서버로만 전송됩니다. 사이트를 공개 배포할 경우에도 각 사용자가 **자기 키**를 넣는 구조이니, 다른 사람에게 내 키를 넣은 상태로 기기를 넘기지 마세요.
+
+## Instagram 자동 게시 설정 (선택)
+
+Instagram 공식 API는 **비즈니스 또는 크리에이터 계정**만 게시를 허용하고, 이미지는 **공개 URL의 JPEG**만 받습니다.
+그래서 카드 이미지를 무료 이미지 호스팅(imgbb)에 올린 뒤 그 주소로 게시합니다.
+
+1. Instagram 앱 → 설정 → 계정 유형을 **프로페셔널(비즈니스/크리에이터)** 로 전환
+2. https://developers.facebook.com 에서 앱 생성 → **Instagram** 제품 추가
+3. `instagram_business_basic`, `instagram_business_content_publish` (또는 Facebook 로그인 방식이면 `instagram_basic`, `instagram_content_publish`, `pages_show_list`) 권한으로 **액세스 토큰** 발급
+4. **Instagram 비즈니스 계정 ID** 확인 (Graph API 탐색기에서 `me?fields=user_id,username` 또는 `페이지ID?fields=instagram_business_account`)
+5. https://api.imgbb.com 에서 무료 **API 키** 발급
+6. 사이트 ⚙ 설정에 토큰 · 계정 ID · imgbb 키 입력 → 저장
+7. 캡션·게시 → **자동 게시 → API로 바로 게시**
+
+참고
+- 토큰이 `IG...` 로 시작하면 `graph.instagram.com`, 그 외(`EAA...`)는 `graph.facebook.com` 을 자동 사용합니다.
+- 캐러셀은 2~10장, 비율은 1:1 또는 4:5 권장 (9:16 은 피드 게시 불가, 3:4 는 거부될 수 있음)
+- imgbb 에 올라간 이미지는 링크를 아는 누구나 볼 수 있습니다.
+- 토큰은 만료 기간이 있으니(단기 1시간 / 장기 60일) 게시가 안 되면 새로 발급하세요.
+
+## 파일 구조
+
+```
+index.html          화면 구조
+css/app.css         앱 UI · 반응형
+css/cards.css       카드 디자인 3종
+js/store.js         상태 · 자동 저장
+js/generator.js     기본 템플릿 문구 · 캡션 · 해시태그
+js/ai.js            Claude AI 작성
+js/render.js        카드 그리기 · 글자 크기 자동 맞춤
+js/exporter.js      PNG/JPEG/ZIP 내보내기 (html2canvas, JSZip)
+js/instagram.js     공유 · Instagram API 게시
+js/app.js           화면 동작 연결
+serve.mjs           로컬 미리보기 서버
+```
