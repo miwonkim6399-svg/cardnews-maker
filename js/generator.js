@@ -253,5 +253,21 @@
     return { label: "POINT", title: "새 카드 *제목*", body: "본문 내용을 입력하세요.", accent: "", image: "" };
   }
 
-  window.Generator = { generate, caption, hashtags, blankCard, josa, plain };
+  /** 캡션을 본문 / 해시태그로 나눔 (첫 댓글용) */
+  function splitCaption(full) {
+    const text = String(full || "");
+    const tags = text.match(/#[^\s#]+/g) || [];
+    const body = text.replace(/#[^\s#]+/g, "").split("\n").map((l) => l.replace(/\s+$/, "")).join("\n").replace(/\n{3,}/g, "\n\n").trim();
+    return { body, tags: [...new Set(tags)].join(" ") };
+  }
+  function joinCaption(body, tags) {
+    const b = String(body || "").trim(), t = String(tags || "").trim();
+    return t ? (b ? b + "\n\n" + t : t) : b;
+  }
+  /** 저장 · 공유할 때 쓸 캡션 (분리 모드면 본문만) */
+  function captionFor(state) {
+    return state.splitTags ? splitCaption(state.caption).body : state.caption;
+  }
+
+  window.Generator = { generate, caption, hashtags, blankCard, josa, plain, splitCaption, joinCaption, captionFor };
 })();

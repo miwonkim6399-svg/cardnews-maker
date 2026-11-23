@@ -82,6 +82,8 @@
       align: "auto",       // auto = 디자인 기본 정렬
       avatar: "",          // 프로필(로고) 이미지 dataURL
       imageDim: 35,        // 배경 사진 어둡게 (%)
+      series: { name: "", no: 1 },   // 시리즈 표지 (예: 부의 정원 노트 No.03)
+      splitTags: false,    // 해시태그를 첫 댓글로 분리
       cards: [],
       caption: "",
       active: 0,
@@ -135,7 +137,8 @@
     if (!RATIOS[merged.ratio]) merged.ratio = "4:5";
     if (!DESIGNS.some((d) => d.id === merged.design)) merged.design = "classic";
     if (!Array.isArray(merged.cards)) merged.cards = [];
-    merged.cards = merged.cards.map((c) => Object.assign({ label: "", title: "", body: "", accent: "", image: "" }, c));
+    merged.cards = merged.cards.map((c) => Object.assign({ label: "", title: "", body: "", accent: "", image: "", sticker: "", stickerPos: "tr", stickerSize: "md" }, c));
+    merged.series = Object.assign({ name: "", no: 1 }, merged.series || {});
     merged.active = Math.min(Math.max(0, merged.active | 0), Math.max(0, merged.cards.length - 1));
     if (!merged.account || merged.account === "@my_account") merged.account = DEFAULT_ACCOUNT;
     return merged;
@@ -270,6 +273,20 @@
       await kv.set("library-index", Store.library);
     },
 
+    /* ---------- 게시 일정 캘린더 ---------- */
+    async loadCalendar() {
+      let c = null;
+      try { c = await kv.get("calendar"); } catch (e) { c = null; }
+      return Object.assign({
+        // 0=일 ~ 6=토 → 관심사 (빈 값 = 쉬는 날)
+        weekdays: { 0: "", 1: "realestate", 2: "embroidery", 3: "reading", 4: "plants", 5: "travel", 6: "walking" },
+        entries: {},   // "2026-11-24": { cat, topic, done }
+      }, c || {});
+    },
+    async saveCalendar(cal) {
+      try { await kv.set("calendar", cal); } catch (e) { /* 무시 */ }
+    },
+
     saveSettings(next) {
       Store.settings = Object.assign(defaultSettings(), next);
       safeLocal(() => localStorage.setItem(SETTINGS_KEY, JSON.stringify(Store.settings)));
@@ -282,7 +299,12 @@
     /** 새로 만들기: 브랜드 설정(계정 · 프로필 · 색 · 글꼴)은 유지 */
     reset() {
       const s = Store.state;
-      const keep = { account: s.account, accent: s.accent, design: s.design, ratio: s.ratio, avatar: s.avatar, titleFont: s.titleFont, align: s.align, category: s.category, tone: s.tone };
+      const keep = {
+        account: s.account, accent: s.accent, design: s.design, ratio: s.ratio, avatar: s.avatar, titleFont: s.titleFont, align: s.align,
+        category: s.category, tone: s.tone, splitTags: s.splitTags,
+        // 시리즈를 쓰는 중이면 다음 편 번호로
+        series: { name: s.series.name, no: s.series.name && s.cards.length ? (s.series.no | 0) + 1 : s.series.no },
+      };
       Store.state = Object.assign(defaultProject(), keep);
       Store.resetHistory();
       Store.save({ noHistory: true });

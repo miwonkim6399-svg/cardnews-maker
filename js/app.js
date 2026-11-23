@@ -29,7 +29,17 @@
     libraryModal: $("#libraryModal"), libraryGrid: $("#libraryGrid"),
     igModal: $("#igModal"), igTabs: $("#igTabs"), igPost: $("#igPost"), igGrid: $("#igGrid"), igHolder: $("#igHolder"), igAvatar: $("#igAvatar"), igName: $("#igName"), igCaption: $("#igCaption"), igDots: $("#igDots"),
     toast: $("#toast"),
+    // 추가 기능
+    inSeries: $("#inSeries"), inSeriesNo: $("#inSeriesNo"),
+    stickerGrid: $("#stickerGrid"), stickerPosSeg: $("#stickerPosSeg"), stickerSizeSeg: $("#stickerSizeSeg"),
+    inSplitTags: $("#inSplitTags"), tagsBox: $("#tagsBox"), edTags: $("#edTags"), tagsCount: $("#tagsCount"), btnCopyTags: $("#btnCopyTags"),
+    reelSecSeg: $("#reelSecSeg"), btnReel: $("#btnReel"), reelPreview: $("#reelPreview"),
+    btnCalendar: $("#btnCalendar"), calendarModal: $("#calendarModal"), weekRule: $("#weekRule"), calGrid: $("#calGrid"),
+    calDetail: $("#calDetail"), calDate: $("#calDate"), calDone: $("#calDone"), calCat: $("#calCat"), calTopic: $("#calTopic"),
+    calShuffle: $("#calShuffle"), calMake: $("#calMake"), calClear: $("#calClear"),
   };
+
+  const STICKERS = ["🌿", "🌸", "🌷", "🪴", "🍃", "🍂", "🌙", "☕", "🧵", "🪡", "📚", "✈️", "🏡", "🗝️", "📌", "💡", "✨", "♡", "❦", "❀", "✿", "✦", "★", "✔", "①", "②", "③"];
 
   /* ---------- 공통 ---------- */
   let toastTimer = null;
@@ -196,8 +206,21 @@
     el.avatarPreview.classList.toggle("has", !!st().avatar);
     el.btnAvatarClear.hidden = !st().avatar;
     el.selFont.value = st().titleFont || "";
+    el.inSeries.value = st().series.name || "";
+    el.inSeriesNo.value = st().series.no || 1;
     syncAlign();
     renderSwatches();
+  }
+
+  /* ---------- 스티커 ---------- */
+  function renderStickers() {
+    const c = curCard();
+    const cur = c ? c.sticker || "" : "";
+    el.stickerGrid.innerHTML = `<button type="button" class="stk none" data-v="" role="radio" aria-checked="${!cur}" title="스티커 없음">없음</button>` +
+      STICKERS.map((s) => `<button type="button" class="stk" data-v="${s}" role="radio" aria-checked="${cur === s}">${s}</button>`).join("");
+    const pos = c ? c.stickerPos || "tr" : "tr", size = c ? c.stickerSize || "md" : "md";
+    el.stickerPosSeg.querySelectorAll("[data-v]").forEach((b) => { b.setAttribute("aria-checked", String(b.dataset.v === pos)); b.disabled = !cur; });
+    el.stickerSizeSeg.querySelectorAll("[data-v]").forEach((b) => { b.setAttribute("aria-checked", String(b.dataset.v === size)); b.disabled = !cur || pos === "c"; });
   }
 
   /* ---------- 편집 패널 ---------- */
@@ -220,13 +243,34 @@
     el.btnMoveRight.disabled = !has || s.active >= s.cards.length - 1;
     el.btnAddCard.disabled = el.btnDupCard.disabled = !has || s.cards.length >= MAX_CARDS;
     el.btnDelCard.disabled = !has || s.cards.length <= MIN_CARDS;
+    renderStickers();
   }
 
+  /* ---------- 캡션 (첫 댓글 해시태그 분리) ---------- */
+  function renderCaption() {
+    const s = st();
+    el.inSplitTags.checked = !!s.splitTags;
+    el.tagsBox.hidden = !s.splitTags;
+    if (s.splitTags) {
+      const { body, tags } = window.Generator.splitCaption(s.caption);
+      el.caption.value = body;
+      el.edTags.value = tags;
+      el.btnCopyCaption.textContent = "본문 복사";
+    } else {
+      el.caption.value = s.caption;
+      el.btnCopyCaption.textContent = "캡션 복사";
+    }
+    renderCaptionMeta();
+  }
   function renderCaptionMeta() {
     const v = el.caption.value;
-    const tags = (v.match(/#[^\s#]+/g) || []).length;
-    el.captionCount.textContent = `${v.length.toLocaleString()} / 2,200자 · 해시태그 ${tags}개`;
-    el.captionCount.style.color = v.length > 2200 || tags > 30 ? "var(--danger)" : "";
+    const tagsInBody = (v.match(/#[^\s#]+/g) || []).length;
+    const tagsTotal = (st().caption.match(/#[^\s#]+/g) || []).length;
+    el.captionCount.textContent = st().splitTags
+      ? `본문 ${v.length.toLocaleString()} / 2,200자`
+      : `${v.length.toLocaleString()} / 2,200자 · 해시태그 ${tagsInBody}개`;
+    el.captionCount.style.color = v.length > 2200 || tagsTotal > 30 ? "var(--danger)" : "";
+    el.tagsCount.textContent = `해시태그 ${tagsTotal}개${tagsTotal > 30 ? " (30개 이하로 줄여 주세요)" : ""}`;
   }
 
   function renderModeHint() {
@@ -257,7 +301,7 @@
     });
   }
 
-  let syncTone, syncCount, syncMode, syncRatio, syncAlign;
+  let syncTone, syncCount, syncMode, syncRatio, syncAlign, syncReelSec;
   function renderControls() {
     el.topic.value = st().topic;
     syncTone(); syncCount(); syncMode(); syncRatio();
@@ -271,8 +315,8 @@
   }
   function renderAll() {
     renderCards();
-    el.caption.value = st().caption;
-    renderCaptionMeta();
+    renderCaption();
+    syncReelSec();
     syncUndo();
   }
   function refreshLook() { renderMain(); renderThumbs(); }
@@ -334,7 +378,7 @@
     el.btnCaptionGen.textContent = useAi ? "AI 작성 중…" : "작성 중…";
     try {
       s.caption = useAi ? await window.AI.writeCaption(s) : window.Generator.caption(s);
-      el.caption.value = s.caption; renderCaptionMeta(); changed();
+      renderCaption(); changed();
       toast("캡션을 새로 작성했어요.");
     } catch (err) { toast(err.message, true); }
     finally { el.btnCaptionGen.disabled = false; el.btnCaptionGen.textContent = "다시 작성"; }
@@ -449,8 +493,14 @@
     igIndex = s.active;
     el.igName.textContent = (s.account || "").replace(/^@/, "") || "my_account";
     el.igAvatar.style.backgroundImage = s.avatar ? `url('${s.avatar}')` : "";
-    const cap = escapeHtml(s.caption || "").replace(/(#[^\s#]+)/g, '<span class="tag">$1</span>');
-    el.igCaption.innerHTML = `<b>${escapeHtml(el.igName.textContent)}</b> ${cap}`;
+    const tagify = (t) => escapeHtml(t || "").replace(/(#[^\s#]+)/g, '<span class="tag">$1</span>');
+    const name = `<b>${escapeHtml(el.igName.textContent)}</b>`;
+    if (s.splitTags) {
+      const { body, tags } = window.Generator.splitCaption(s.caption);
+      el.igCaption.innerHTML = `${name} ${tagify(body)}` + (tags ? `<div style="margin-top:10px;color:#8e8e8e">댓글 1개</div>${name} ${tagify(tags)}` : "");
+    } else {
+      el.igCaption.innerHTML = `${name} ${tagify(s.caption)}`;
+    }
     el.igModal.showModal();
     syncIgTab("post");
   }
@@ -516,7 +566,7 @@
   }
   el.btnShareGo.addEventListener("click", async () => {
     if (!preparedFiles) return;
-    const caption = st().caption;
+    const caption = window.Generator.captionFor(st());
     if (el.shareModal.dataset.mode === "mobile") {
       try {
         await window.Insta.shareFiles(preparedFiles, caption);
@@ -551,6 +601,99 @@
       if (link) { const li = document.createElement("li"); li.className = "ok"; li.innerHTML = `<a href="${encodeURI(link)}" target="_blank" rel="noopener">게시물 보기 ↗</a>`; el.publishLog.appendChild(li); }
     } catch (err) { log("실패: " + (err.message || err), "err"); toast("게시에 실패했어요. 아래 기록을 확인하세요.", true); }
     finally { setBusy(el.btnApiPublish, false, "API로 바로 게시"); }
+  }
+
+  /* ==========================================================
+     릴스 영상
+     ========================================================== */
+  let reelUrl = null;
+  async function makeReel() {
+    const s = st();
+    if (!s.cards.length) return toast("먼저 카드뉴스를 만들어 주세요.", true);
+    if (!window.Reels.supported()) return toast("이 브라우저는 영상 만들기를 지원하지 않아요. PC의 크롬 · 엣지에서 해 주세요.", true);
+    const sec = s.reelSec || 3;
+    setBusy(el.btnReel, true, "영상 만드는 중…");
+    try {
+      const { blob, ext } = await window.Reels.makeReel(s, { seconds: sec, onProgress: (m) => setBusy(el.btnReel, true, m) });
+      if (reelUrl) URL.revokeObjectURL(reelUrl);
+      reelUrl = URL.createObjectURL(blob);
+      el.reelPreview.src = reelUrl; el.reelPreview.hidden = false;
+      const name = `${window.Exporter.slug(s.topic)}_릴스.${ext}`;
+      let savedTo = "";
+      if (window.Exporter.folderSupported() && (await window.Exporter.getFolder())) {
+        try { savedTo = await window.Exporter.saveExtraToFolder(s, name, blob); } catch (e) { savedTo = ""; }
+      }
+      if (!savedTo) window.Exporter.downloadBlob(blob, name);
+      toast(savedTo ? `🎬 ${savedTo} 에 저장했어요!` : `🎬 영상(${ext.toUpperCase()})을 받았어요!`);
+      if (ext !== "mp4") toast("이 브라우저는 WebM으로 만들어져요. 인스타그램에는 크롬 최신 버전의 MP4를 권장해요.", true);
+    } catch (err) {
+      toast(err.message || "영상을 만들지 못했어요.", true);
+    } finally {
+      setBusy(el.btnReel, false, "영상 만들기");
+    }
+  }
+
+  /* ==========================================================
+     게시 일정 캘린더
+     ========================================================== */
+  const DOW = ["일", "월", "화", "수", "목", "금", "토"];
+  let cal = null, calSel = null;
+  const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  function calDays() {
+    // 이번 주 일요일부터 4주
+    const start = new Date(); start.setHours(0, 0, 0, 0); start.setDate(start.getDate() - start.getDay());
+    return Array.from({ length: 28 }, (_, i) => { const d = new Date(start); d.setDate(start.getDate() + i); return d; });
+  }
+  function suggestTopic(catId, d) {
+    const c = CATS[catId];
+    if (!c) return "";
+    const week = Math.floor((d.getTime() / 86400000 + 4) / 7); // 주차마다 다른 추천
+    return c.ideas[week % c.ideas.length];
+  }
+  function calEntry(d) {
+    const key = ymd(d);
+    const e = cal.entries[key];
+    const cat = e && e.cat !== undefined ? e.cat : cal.weekdays[d.getDay()] || "";
+    return { key, cat, topic: (e && e.topic) || (cat ? suggestTopic(cat, d) : ""), done: !!(e && e.done), custom: !!e };
+  }
+  function renderCalendar() {
+    const catOptions = (sel) => `<option value="">쉬는 날</option>` + Object.entries(CATS).map(([id, c]) => `<option value="${id}" ${sel === id ? "selected" : ""}>${c.icon} ${c.name}</option>`).join("");
+    el.weekRule.innerHTML = DOW.map((n, i) => `<label>${n}<select data-dow="${i}">${catOptions(cal.weekdays[i] || "")}</select></label>`).join("");
+    const today = ymd(new Date());
+    el.calGrid.innerHTML = calDays().map((d) => {
+      const e = calEntry(d);
+      const c = CATS[e.cat];
+      const cls = ["cal-cell", e.key === today ? "today" : "", e.done ? "done" : "", !e.cat ? "rest" : "", e.key === calSel ? "sel" : "", e.key < today ? "past" : ""].filter(Boolean).join(" ");
+      return `<button type="button" class="${cls}" data-key="${e.key}">
+        <span class="d"><span>${d.getMonth() + 1}/${d.getDate()} <span class="dw">${DOW[d.getDay()]}</span></span><span class="ic">${c ? c.icon : ""}</span></span>
+        <span class="tp">${c ? escapeHtml(e.topic) : "쉬는 날"}</span></button>`;
+    }).join("");
+    renderCalDetail();
+  }
+  function renderCalDetail() {
+    if (!calSel) { el.calDetail.hidden = true; return; }
+    const d = new Date(calSel + "T00:00:00");
+    const e = calEntry(d);
+    el.calDetail.hidden = false;
+    el.calDate.textContent = `${d.getMonth() + 1}월 ${d.getDate()}일 (${DOW[d.getDay()]})`;
+    el.calDone.checked = e.done;
+    el.calCat.innerHTML = `<option value="">쉬는 날</option>` + Object.entries(CATS).map(([id, c]) => `<option value="${id}">${c.icon} ${c.name}</option>`).join("");
+    el.calCat.value = e.cat;
+    el.calTopic.value = e.topic;
+    el.calMake.disabled = !e.cat;
+  }
+  function calUpdate(patch) {
+    const d = new Date(calSel + "T00:00:00");
+    const e = calEntry(d);
+    cal.entries[calSel] = Object.assign({ cat: e.cat, topic: e.topic, done: e.done }, patch);
+    S.saveCalendar(cal);
+    renderCalendar();
+  }
+  async function openCalendar() {
+    cal = await S.loadCalendar();
+    calSel = calSel || ymd(new Date());
+    renderCalendar();
+    el.calendarModal.showModal();
   }
 
   /* ==========================================================
@@ -679,12 +822,15 @@
     });
 
     // 캡션
-    el.caption.addEventListener("input", () => { st().caption = el.caption.value; renderCaptionMeta(); changed(); });
+    el.caption.addEventListener("input", () => {
+      st().caption = st().splitTags ? window.Generator.joinCaption(el.caption.value, el.edTags.value) : el.caption.value;
+      renderCaptionMeta(); changed();
+    });
     el.btnCaptionGen.addEventListener("click", regenerateCaption);
     el.btnCopyCaption.addEventListener("click", async () => {
       if (!el.caption.value.trim()) return toast("복사할 캡션이 없어요.", true);
       const ok = await window.Insta.copyText(el.caption.value);
-      toast(ok ? "캡션을 복사했어요! 인스타그램 문구 칸에 붙여넣기 하세요." : "복사에 실패했어요. 직접 선택해서 복사해 주세요.", !ok);
+      toast(ok ? (st().splitTags ? "본문을 복사했어요! 문구 칸에 붙여넣고, 해시태그는 게시 후 첫 댓글로 달아 주세요." : "캡션을 복사했어요! 인스타그램 문구 칸에 붙여넣기 하세요.") : "복사에 실패했어요. 직접 선택해서 복사해 주세요.", !ok);
     });
 
     // 저장 / 공유
@@ -701,6 +847,75 @@
     el.btnApiPublish.addEventListener("click", apiPublish);
     el.btnSaveLibrary.addEventListener("click", saveToLibrary);
     if (!window.Insta.isTouchDevice()) el.shareHint.textContent = "PC: 이미지 저장 + 캡션 복사 후 instagram.com 이 열려요. 휴대폰에서 이 사이트를 열면 인스타그램 앱으로 바로 공유돼요.";
+
+    // 시리즈
+    el.inSeries.addEventListener("input", () => { st().series.name = el.inSeries.value; changed(); refreshLook(); });
+    el.inSeriesNo.addEventListener("input", () => { st().series.no = Math.max(1, parseInt(el.inSeriesNo.value, 10) || 1); changed(); refreshLook(); });
+
+    // 스티커
+    el.stickerGrid.addEventListener("click", (e) => {
+      const b = e.target.closest(".stk"); const c = curCard();
+      if (!b || !c) return;
+      c.sticker = b.dataset.v; changed(); renderMain(); renderThumb(st().active); renderStickers();
+    });
+    el.stickerPosSeg.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-v]"); const c = curCard();
+      if (!b || !c) return;
+      c.stickerPos = b.dataset.v; changed(); renderMain(); renderThumb(st().active); renderStickers();
+    });
+    el.stickerSizeSeg.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-v]"); const c = curCard();
+      if (!b || !c) return;
+      c.stickerSize = b.dataset.v; changed(); renderMain(); renderThumb(st().active); renderStickers();
+    });
+
+    // 첫 댓글 해시태그
+    el.inSplitTags.addEventListener("change", () => { st().splitTags = el.inSplitTags.checked; changed(); renderCaption(); });
+    el.edTags.addEventListener("input", () => {
+      st().caption = window.Generator.joinCaption(el.caption.value, el.edTags.value); renderCaptionMeta(); changed();
+    });
+    el.btnCopyTags.addEventListener("click", async () => {
+      if (!el.edTags.value.trim()) return toast("복사할 해시태그가 없어요.", true);
+      const ok = await window.Insta.copyText(el.edTags.value.trim());
+      toast(ok ? "해시태그를 복사했어요! 게시 후 첫 댓글에 붙여넣으세요." : "복사에 실패했어요.", !ok);
+    });
+
+    // 릴스
+    syncReelSec = bindRadio(el.reelSecSeg, () => st().reelSec || 3, (v) => { st().reelSec = Number(v); syncReelSec(); changed(); });
+    el.btnReel.addEventListener("click", makeReel);
+
+    // 게시 일정
+    el.btnCalendar.addEventListener("click", openCalendar);
+    el.weekRule.addEventListener("change", (e) => {
+      const sel = e.target.closest("select[data-dow]"); if (!sel) return;
+      cal.weekdays[sel.dataset.dow] = sel.value;
+      // 요일 규칙을 바꾸면, 직접 고치지 않은 날짜는 새 규칙을 따름
+      Object.keys(cal.entries).forEach((k) => { const en = cal.entries[k]; if (!en.done && new Date(k + "T00:00:00").getDay() === Number(sel.dataset.dow)) delete cal.entries[k]; });
+      S.saveCalendar(cal); renderCalendar();
+    });
+    el.calGrid.addEventListener("click", (e) => { const b = e.target.closest(".cal-cell"); if (b) { calSel = b.dataset.key; renderCalendar(); } });
+    el.calDone.addEventListener("change", () => calUpdate({ done: el.calDone.checked }));
+    el.calCat.addEventListener("change", () => {
+      const d = new Date(calSel + "T00:00:00");
+      calUpdate({ cat: el.calCat.value, topic: el.calCat.value ? suggestTopic(el.calCat.value, d) : "" });
+    });
+    el.calTopic.addEventListener("change", () => calUpdate({ topic: el.calTopic.value.trim() }));
+    el.calShuffle.addEventListener("click", () => {
+      const c = CATS[el.calCat.value]; if (!c) return;
+      const others = c.ideas.filter((x) => x !== el.calTopic.value);
+      calUpdate({ topic: others[Math.floor(Math.random() * others.length)] });
+    });
+    el.calClear.addEventListener("click", () => { delete cal.entries[calSel]; S.saveCalendar(cal); renderCalendar(); });
+    el.calMake.addEventListener("click", () => {
+      const cat = el.calCat.value, topic = el.calTopic.value.trim();
+      if (!cat) return;
+      el.calendarModal.close();
+      if (st().category !== cat) applyCategory(cat);
+      el.topic.value = topic; st().topic = topic; changed();
+      setTab("create");
+      toast("주제를 넣었어요. 「카드뉴스 만들기」를 눌러 주세요. 올린 뒤엔 일정에서 「올렸어요 ✓」를 체크하세요.");
+      el.btnGenerate.focus();
+    });
 
     // 상단
     el.btnSettings.addEventListener("click", openSettings);

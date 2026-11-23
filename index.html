@@ -24,6 +24,7 @@
       <span class="save-status" id="saveStatus" title="작업 내용은 이 브라우저에 자동 저장됩니다">
         <span class="dot"></span><span class="txt">자동 저장 대기</span>
       </span>
+      <button class="btn ghost sm" id="btnCalendar" type="button">📅 <span class="hide-sm">게시 일정</span></button>
       <button class="btn ghost sm" id="btnLibrary" type="button">📚 <span class="hide-sm">내 보관함</span></button>
       <a class="btn ghost sm" href="사용법.html" target="_blank" rel="noopener">📖 <span class="hide-sm">사용법</span></a>
       <button class="btn ghost sm" id="btnNew" type="button" title="새로 만들기">✚ <span class="hide-sm">새로 만들기</span></button>
@@ -109,6 +110,13 @@
           <span class="field-label">대표 색 <small class="muted" id="accentName"></small></span>
           <div class="swatches" id="accentSwatches"></div>
         </div>
+        <div class="field">
+          <span class="field-label">시리즈 표지 <small class="muted">이름을 넣으면 표지에 「시리즈명 No.03」 배지가 붙어요</small></span>
+          <div class="row gap-8">
+            <input id="inSeries" type="text" maxlength="24" placeholder="예) 부의 정원 노트" />
+            <input id="inSeriesNo" type="number" min="1" max="999" class="num-input" aria-label="시리즈 번호" />
+          </div>
+        </div>
         <div class="row gap-12 wrap">
           <label class="field grow">
             <span class="field-label">제목 글꼴</span>
@@ -187,6 +195,20 @@
           </label>
         </div>
         <div class="field">
+          <span class="field-label">스티커 · 아이콘 <small class="muted">이 카드에 하나 붙여요</small></span>
+          <div class="sticker-grid" id="stickerGrid"></div>
+          <div class="row gap-8 wrap">
+            <div class="seg seg-pos" id="stickerPosSeg" role="radiogroup" aria-label="스티커 위치">
+              <button type="button" data-v="tl">↖</button><button type="button" data-v="tr">↗</button>
+              <button type="button" data-v="bl">↙</button><button type="button" data-v="br">↘</button>
+              <button type="button" data-v="c" title="가운데 은은하게">◎</button>
+            </div>
+            <div class="seg" id="stickerSizeSeg" role="radiogroup" aria-label="스티커 크기">
+              <button type="button" data-v="sm">작게</button><button type="button" data-v="md">보통</button><button type="button" data-v="lg">크게</button>
+            </div>
+          </div>
+        </div>
+        <div class="field">
           <span class="field-label">이 카드만 다른 색</span>
           <div class="row gap-8 wrap">
             <label class="toggle"><input type="checkbox" id="edAccentOn" /><span>개별 색 사용</span></label>
@@ -203,10 +225,19 @@
           <h2 class="block-title"><span class="step">5</span>인스타그램 캡션</h2>
           <button class="btn ghost xs" id="btnCaptionGen" type="button">다시 작성</button>
         </div>
+        <label class="toggle"><input type="checkbox" id="inSplitTags" /><span>해시태그를 <b>첫 댓글</b>로 따로 달기 <small class="muted">(본문이 깔끔해져요)</small></span></label>
         <textarea id="edCaption" class="caption-box" rows="9" placeholder="카드를 만들면 캡션이 자동으로 작성됩니다."></textarea>
         <div class="row between">
           <span class="hint" id="captionCount">0 / 2,200자 · 해시태그 0개</span>
           <button class="btn primary sm" id="btnCopyCaption" type="button">캡션 복사</button>
+        </div>
+        <div class="field" id="tagsBox" hidden>
+          <span class="field-label">첫 댓글용 해시태그 <small class="muted">게시 직후 내 게시물에 댓글로 붙여넣으세요</small></span>
+          <textarea id="edTags" rows="3"></textarea>
+          <div class="row between">
+            <span class="hint" id="tagsCount">해시태그 0개</span>
+            <button class="btn outline sm" id="btnCopyTags" type="button">해시태그 복사</button>
+          </div>
         </div>
       </section>
 
@@ -219,6 +250,17 @@
           <button class="btn insta block-btn" id="btnShare" type="button"><span class="btn-label">내 인스타그램에 올리기</span></button>
           <p class="hint" id="shareHint">모바일: 공유창에서 Instagram을 고르면 카드가 여러 장(캐러셀)으로 들어가요. 캡션은 자동 복사돼요.</p>
           <button class="btn ghost sm" id="btnSaveLibrary" type="button">📚 이 작품을 보관함에 저장</button>
+          <div class="reel-box">
+            <div class="row between wrap gap-8">
+              <b class="reel-title">🎬 릴스 영상 만들기</b>
+              <div class="seg" id="reelSecSeg" role="radiogroup" aria-label="한 장당 시간">
+                <button type="button" data-v="2">2초</button><button type="button" data-v="3">3초</button><button type="button" data-v="4">4초</button>
+              </div>
+            </div>
+            <p class="hint">카드를 세로(9:16) 슬라이드 영상으로 만들어요. 배경 음악은 인스타그램 릴스 편집에서 넣으면 저작권 걱정이 없어요.</p>
+            <button class="btn outline block-btn" id="btnReel" type="button"><span class="btn-label">영상 만들기</span></button>
+            <video id="reelPreview" controls playsinline hidden></video>
+          </div>
           <details class="details">
             <summary>자동 게시 (Instagram API 연동 · 고급)</summary>
             <p class="hint">비즈니스·크리에이터 계정을 연결해 두면 버튼 한 번으로 캐러셀 + 캡션이 게시됩니다.</p>
@@ -293,6 +335,31 @@
     </div>
   </dialog>
 
+  <!-- 게시 일정 캘린더 -->
+  <dialog class="modal wide" id="calendarModal">
+    <div class="modal-inner">
+      <div class="modal-head"><h2>📅 게시 일정</h2><button class="icon-btn" type="button" data-close aria-label="닫기">✕</button></div>
+      <p class="hint">요일마다 관심사를 정해 두면 앞으로 4주 동안의 주제가 자동으로 제안돼요. 날짜를 누르면 주제를 바꾸거나 바로 만들 수 있어요.</p>
+      <div class="week-rule" id="weekRule"></div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-detail" id="calDetail" hidden>
+        <div class="row between wrap gap-8">
+          <b id="calDate"></b>
+          <label class="toggle"><input type="checkbox" id="calDone" /><span>올렸어요 ✓</span></label>
+        </div>
+        <div class="row gap-8 wrap">
+          <select id="calCat" class="grow"></select>
+          <input id="calTopic" type="text" class="grow" maxlength="120" placeholder="주제" />
+          <button class="btn ghost sm" id="calShuffle" type="button" title="다른 주제 추천">🎲</button>
+        </div>
+        <div class="row gap-8 wrap">
+          <button class="btn primary sm" id="calMake" type="button">이 주제로 카드뉴스 만들기</button>
+          <button class="btn ghost sm" id="calClear" type="button">이 날 비우기</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
   <!-- 인스타그램 미리보기 -->
   <dialog class="modal ig-modal" id="igModal">
     <div class="modal-inner">
@@ -323,6 +390,7 @@
   <script src="js/render.js"></script>
   <script src="js/exporter.js"></script>
   <script src="js/instagram.js"></script>
+  <script src="js/reels.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

@@ -153,16 +153,25 @@
     log("캐러셀 항목 등록 완료", "ok");
 
     log("게시물 묶음 생성 중…");
+    const split = state.splitTags ? window.Generator.splitCaption(state.caption) : null;
     const carousel = await graphPost(base, `${igId}/media`, {
       media_type: "CAROUSEL",
       children: children.join(","),
-      caption: state.caption || "",
+      caption: split ? split.body : state.caption || "",
       access_token: token,
     });
     await waitFinished(base, carousel.id, token, log);
 
     log("게시 중…");
     const pub = await graphPost(base, `${igId}/media_publish`, { creation_id: carousel.id, access_token: token });
+    if (split && split.tags) {
+      try {
+        await graphPost(base, `${pub.id}/comments`, { message: split.tags, access_token: token });
+        log("첫 댓글에 해시태그를 달았어요", "ok");
+      } catch (e) {
+        log("첫 댓글은 권한이 없어 달지 못했어요. 해시태그를 복사해 직접 댓글로 달아 주세요.", "err");
+      }
+    }
     let link = null;
     try {
       const info = await graphGet(base, pub.id, { fields: "permalink", access_token: token });

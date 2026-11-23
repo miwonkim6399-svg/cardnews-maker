@@ -14,6 +14,26 @@
 .card.al-left .c-main { align-items: flex-start; text-align: left; }
 .card.al-left .c-rule { margin-left: 0 !important; margin-right: 0 !important; }
 
+/* 스티커 · 아이콘 */
+.card .c-sticker { position: absolute; z-index: 3; line-height: 1; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Noto Serif KR", serif; color: var(--accent); }
+.card .c-sticker.sz-sm { font-size: 96px; }
+.card .c-sticker.sz-md { font-size: 160px; }
+.card .c-sticker.sz-lg { font-size: 250px; }
+.card .c-sticker.pos-tr { top: calc(var(--pad-y) + 90px); right: var(--pad-x); }
+.card .c-sticker.pos-tl { top: calc(var(--pad-y) + 90px); left: var(--pad-x); }
+.card .c-sticker.pos-br { bottom: calc(var(--pad-y) + 110px); right: var(--pad-x); }
+.card .c-sticker.pos-bl { bottom: calc(var(--pad-y) + 110px); left: var(--pad-x); }
+.card .c-sticker.pos-c { top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: .16; font-size: 560px; z-index: 0; }
+.card.t-cover .c-sticker, .card.has-img .c-sticker, .card.t-outro.d-classic .c-sticker { color: #f3dfa2; }
+
+/* 시리즈 표지 배지 */
+.card .c-series { display: inline-flex; align-items: center; gap: 18px; align-self: flex-start; border: 2px solid currentColor; padding: 12px 26px; margin-bottom: 44px; font-size: 27px; letter-spacing: .12em; flex: none; }
+.card .c-series span { font-weight: 700; }
+.card .c-series b { font-family: "Noto Serif KR", serif; font-weight: 700; font-style: italic; color: var(--accent); }
+.card.t-cover .c-series b { color: inherit; opacity: .85; }
+.d-classic .c-series, .d-garden .c-series, .d-linen.t-cover .c-series, .card.al-center .c-series { align-self: center; }
+.card.al-left .c-series { align-self: flex-start; }
+
 /* 사진이 있는 카드: 디자인과 상관없이 사진 위에 흰 글씨 */
 .card.has-img:not(.d-photo) .c-deco { display: none; }
 .card.has-img:not(.d-photo) { color: #fff !important; background: #222 !important; }

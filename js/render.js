@@ -97,18 +97,25 @@
     const account = String(state.account || "").trim();
     const bg = hasImg ? `<div class="c-bg" style="background-image:url('${card.image}')"></div><div class="c-dim"></div>` : "";
     const avatarStyle = state.avatar ? ` style="background-image:url('${state.avatar}')"` : "";
+    const series = state.series && String(state.series.name || "").trim();
+    const seriesBadge = series && type === "cover"
+      ? `<div class="c-series"><span>${escapeHtml(series)}</span><b>No. ${pad2(Math.max(1, state.series.no | 0))}</b></div>` : "";
+    const sticker = card.sticker
+      ? `<span class="c-sticker pos-${card.stickerPos || "tr"} sz-${card.stickerSize || "md"}">${escapeHtml(card.sticker)}</span>` : "";
 
     el.innerHTML =
       bg +
       `<div class="c-deco"><span class="dk1"></span><span class="dk2">${decoText(state.design, type, index)}</span><span class="dk3"></span></div>` +
       `<div class="c-top"><span class="c-label">${escapeHtml(card.label)}</span><span class="c-page">${pad2(index + 1)} / ${pad2(total)}</span></div>` +
       `<div class="c-main">` +
+      seriesBadge +
       (isContent ? `<div class="c-num">${numText(state.design, index)}</div>` : "") +
       `<h2 class="c-title">${richText(card.title)}</h2>` +
       (card.body ? `<div class="c-rule"></div>` : "") +
       `<p class="c-body">${richText(card.body)}</p>` +
       `</div>` +
-      `<div class="c-foot"><span class="c-acc"><span class="c-avatar${state.avatar ? " has-photo" : ""}"${avatarStyle}></span><span class="c-account">${escapeHtml(account)}</span></span><span class="c-swipe">${swipeText(state.design, index, total)}</span></div>`;
+      `<div class="c-foot"><span class="c-acc"><span class="c-avatar${state.avatar ? " has-photo" : ""}"${avatarStyle}></span><span class="c-account">${escapeHtml(account)}</span></span><span class="c-swipe">${swipeText(state.design, index, total)}</span></div>` +
+      sticker;
     return el;
   }
 

@@ -53,6 +53,16 @@
     return out;
   }
 
+  /** [파일명, 내용] 목록 — 분리 모드면 캡션.txt + 첫댓글_해시태그.txt */
+  function captionFiles(state) {
+    if (!state.caption) return [];
+    if (!state.splitTags) return [["캡션.txt", state.caption]];
+    const { body, tags } = window.Generator.splitCaption(state.caption);
+    const out = [["캡션.txt", body]];
+    if (tags) out.push(["첫댓글_해시태그.txt", tags]);
+    return out;
+  }
+
   function fileName(state, index, ext) {
     return `${slug(state.topic)}_${String(index + 1).padStart(2, "0")}.${ext}`;
   }
@@ -78,7 +88,7 @@
     const zip = new window.JSZip();
     const blobs = await allBlobs(state, "png", onProgress);
     blobs.forEach((b, i) => zip.file(fileName(state, i, "png"), b));
-    if (state.caption) zip.file("캡션.txt", state.caption);
+    captionFiles(state).forEach(([name, text]) => zip.file(name, text));
     const out = await zip.generateAsync({ type: "blob" });
     downloadBlob(out, `${slug(state.topic)}_카드뉴스.zip`);
   }
@@ -114,22 +124,33 @@
    * 연결된 폴더 안에 「날짜_주제」 폴더를 만들고 카드 PNG + 캡션.txt 저장
    * @returns {Promise<string>} "연결폴더/만든폴더" 표시용 경로
    */
-  async function saveToFolder(state, onProgress) {
+  async function projectDir(state) {
     let root = await getFolder();
     if (!root) root = await pickFolder();
     if (!(await ensurePermission(root))) throw new Error("폴더에 저장할 권한이 없어요. 다시 폴더를 연결해 주세요.");
     const d = new Date();
     const date = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
     const folderName = `${date}_${slug(state.topic)}`;
-    const dir = await root.getDirectoryHandle(folderName, { create: true });
+    return { dir: await root.getDirectoryHandle(folderName, { create: true }), where: `${root.name}/${folderName}` };
+  }
+
+  async function saveToFolder(state, onProgress) {
+    const { dir, where } = await projectDir(state);
     const blobs = await allBlobs(state, "png", onProgress);
     for (let i = 0; i < blobs.length; i++) await writeFile(dir, fileName(state, i, "png"), blobs[i]);
-    if (state.caption) await writeFile(dir, "캡션.txt", new Blob([state.caption], { type: "text/plain;charset=utf-8" }));
-    return `${root.name}/${folderName}`;
+    for (const [name, text] of captionFiles(state)) await writeFile(dir, name, new Blob([text], { type: "text/plain;charset=utf-8" }));
+    return where;
+  }
+
+  /** 릴스 영상 같은 추가 파일을 같은 작품 폴더에 저장 */
+  async function saveExtraToFolder(state, name, blob) {
+    const { dir, where } = await projectDir(state);
+    await writeFile(dir, name, blob);
+    return `${where}/${name}`;
   }
 
   window.Exporter = {
     cardBlob, allBlobs, fileName, downloadBlob, downloadCurrent, downloadZip, slug, thumbDataUrl,
-    folderSupported, getFolder, pickFolder, saveToFolder,
+    folderSupported, getFolder, pickFolder, saveToFolder, saveExtraToFolder, cardCanvas: renderCanvas,
   };
 })();
