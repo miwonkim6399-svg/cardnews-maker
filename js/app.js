@@ -37,9 +37,11 @@
     btnCalendar: $("#btnCalendar"), calendarModal: $("#calendarModal"), weekRule: $("#weekRule"), calGrid: $("#calGrid"),
     calDetail: $("#calDetail"), calDate: $("#calDate"), calDone: $("#calDone"), calCat: $("#calCat"), calTopic: $("#calTopic"),
     calShuffle: $("#calShuffle"), calMake: $("#calMake"), calClear: $("#calClear"),
+    inBrandPhoto: $("#inBrandPhoto"), brandPhotoPreview: $("#brandPhotoPreview"), btnBrandToCover: $("#btnBrandToCover"),
+    btnBrandToAvatar: $("#btnBrandToAvatar"), btnBrandClear: $("#btnBrandClear"), inAutoCover: $("#inAutoCover"),
   };
 
-  const STICKERS = ["🌿", "🌸", "🌷", "🪴", "🍃", "🍂", "🌙", "☕", "🧵", "🪡", "📚", "✈️", "🏡", "🗝️", "📌", "💡", "✨", "♡", "❦", "❀", "✿", "✦", "★", "✔", "①", "②", "③"];
+  const STICKERS = ["🌹", "🌿", "🌸", "🌷", "🪴", "🍃", "🍂", "🌙", "☕", "🧵", "🪡", "📚", "✈️", "🏡", "🗝️", "📌", "💡", "✨", "♡", "❦", "❀", "✿", "✦", "★", "✔", "①", "②", "③"];
 
   /* ---------- 공통 ---------- */
   let toastTimer = null;
@@ -86,6 +88,22 @@
       };
       img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("사진을 읽지 못했어요.")); };
       img.src = url;
+    });
+  }
+
+  /** dataURL 사진을 가운데 기준 정사각형으로 잘라 작은 프로필 사진으로 */
+  function cropSquare(dataUrl, size) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const s = Math.min(img.width, img.height);
+        const c = document.createElement("canvas");
+        c.width = c.height = size;
+        c.getContext("2d").drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, size, size);
+        resolve(c.toDataURL("image/jpeg", 0.88));
+      };
+      img.onerror = () => reject(new Error("사진을 읽지 못했어요."));
+      img.src = dataUrl;
     });
   }
 
@@ -206,6 +224,13 @@
     el.avatarPreview.classList.toggle("has", !!st().avatar);
     el.btnAvatarClear.hidden = !st().avatar;
     el.selFont.value = st().titleFont || "";
+    const bp = st().brandPhoto;
+    el.brandPhotoPreview.style.backgroundImage = bp ? `url('${bp}')` : "";
+    el.brandPhotoPreview.classList.toggle("has", !!bp);
+    el.btnBrandToCover.disabled = el.btnBrandToAvatar.disabled = !bp;
+    el.btnBrandClear.hidden = !bp;
+    el.inAutoCover.checked = !!st().autoCoverPhoto;
+    el.inAutoCover.disabled = !bp;
     el.inSeries.value = st().series.name || "";
     el.inSeriesNo.value = st().series.no || 1;
     syncAlign();
@@ -356,6 +381,7 @@
       const args = { topic: s.topic, tone: s.tone, count: s.count, category: s.category };
       const result = s.mode === "ai" ? await window.AI.generate(args) : window.Generator.generate(args);
       s.cards = result.cards;
+      if (s.autoCoverPhoto && s.brandPhoto && s.cards[0]) s.cards[0].image = s.brandPhoto;
       s.active = 0;
       s.id = S.uid();
       s.caption = result.caption || window.Generator.caption(s);
@@ -847,6 +873,35 @@
     el.btnApiPublish.addEventListener("click", apiPublish);
     el.btnSaveLibrary.addEventListener("click", saveToLibrary);
     if (!window.Insta.isTouchDevice()) el.shareHint.textContent = "PC: 이미지 저장 + 캡션 복사 후 instagram.com 이 열려요. 휴대폰에서 이 사이트를 열면 인스타그램 앱으로 바로 공유돼요.";
+
+    // 부의 정원 대표 사진
+    el.inBrandPhoto.addEventListener("change", async () => {
+      try {
+        st().brandPhoto = await fileToDataUrl(el.inBrandPhoto.files[0], 1400, 0.85);
+        changed(); renderBrand();
+        toast("🌹 대표 사진을 등록했어요. 「지금 표지에 넣기」나 「프로필 사진으로 쓰기」를 눌러 보세요.");
+      } catch (err) { toast(err.message, true); }
+      el.inBrandPhoto.value = "";
+    });
+    el.btnBrandToCover.addEventListener("click", () => {
+      const s = st();
+      if (!s.brandPhoto || !s.cards.length) return toast("먼저 카드뉴스를 만들어 주세요.", true);
+      s.cards[0].image = s.brandPhoto;
+      if (s.imageDim < 30) s.imageDim = 35;
+      changed(); goTo(0); renderThumb(0); renderEditor();
+      toast("표지에 대표 사진을 넣었어요. 「사진 어둡게」로 글씨 선명도를 조절할 수 있어요.");
+    });
+    el.btnBrandToAvatar.addEventListener("click", async () => {
+      if (!st().brandPhoto) return;
+      st().avatar = await cropSquare(st().brandPhoto, 240);
+      changed(); renderBrand(); refreshLook();
+      toast("프로필 사진으로 넣었어요. 카드 아래 계정명 옆에 보여요.");
+    });
+    el.btnBrandClear.addEventListener("click", () => { st().brandPhoto = ""; st().autoCoverPhoto = false; changed(); renderBrand(); });
+    el.inAutoCover.addEventListener("change", () => {
+      st().autoCoverPhoto = el.inAutoCover.checked; changed();
+      toast(el.inAutoCover.checked ? "앞으로 만드는 카드뉴스 표지에 대표 사진이 자동으로 들어가요." : "자동 넣기를 껐어요.");
+    });
 
     // 시리즈
     el.inSeries.addEventListener("input", () => { st().series.name = el.inSeries.value; changed(); refreshLook(); });

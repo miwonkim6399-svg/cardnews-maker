@@ -90,7 +90,12 @@
     el.style.setProperty("--tint2", mix(accent, "#ffffff", 0.76));
     el.style.setProperty("--tint3", mix(accent, "#ffffff", 0.52));
     el.style.setProperty("--shade", mix(accent, "#000000", 0.35));
-    el.style.setProperty("--dim", String((state.imageDim == null ? 35 : state.imageDim) / 100));
+    // 마지막 장 강조 상자: 이 카드만 색이 다르면 표지(전체) 색으로 맞춰 조화롭게
+    const base = (state.accent || "#3f5a4a").toLowerCase();
+    const hlBg = card.accent && card.accent.toLowerCase() !== base ? base : "#111111";
+    el.style.setProperty("--outro-hl-bg", hlBg);
+    el.style.setProperty("--outro-hl-fg", onColor(hlBg));
+    el.style.setProperty("--dim",String((state.imageDim == null ? 35 : state.imageDim) / 100));
     if (font && font.css) el.style.setProperty("--title-font", font.css);
 
     const isContent = type === "content";

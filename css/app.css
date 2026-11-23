@@ -182,6 +182,10 @@ input[type="color"] { width: 42px; height: 34px; padding: 2px; border: 1px solid
 .avatar-pick { cursor: pointer; flex: none; }
 .avatar-preview { width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; border: 1.5px dashed var(--line-strong); color: var(--muted); font-size: 22px; background: var(--surface-2) center / cover no-repeat; }
 .avatar-preview.has { border: 2px solid var(--gold); color: transparent; }
+.brand-photo-row { display: flex; gap: 12px; align-items: stretch; }
+.brand-photo { cursor: pointer; flex: none; }
+.brand-photo span { width: 112px; height: 140px; border-radius: 12px; display: grid; place-items: center; text-align: center; border: 1.5px dashed var(--line-strong); color: var(--muted); font-size: 12.5px; background: var(--surface-2) center / cover no-repeat; }
+.brand-photo span.has { border: 2px solid var(--gold); color: transparent; }
 .swatches { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
 .sw { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #fffefa; box-shadow: 0 0 0 1px var(--line-strong); padding: 0; }
 .sw[aria-checked="true"] { box-shadow: 0 0 0 2px var(--ink); }

@@ -81,7 +81,7 @@
 .d-bold.t-outro .c-rule { background: var(--on-accent); }
 .d-bold.t-outro .c-body { color: var(--on-accent); font-weight: 600; opacity: 0.92; }
 .d-bold.t-outro .c-title { font-size: calc(var(--fs) * 112px); }
-.d-bold.t-outro .c-title .hl { background: #111; color: #ffd43b; padding: 0 0.1em; }
+.d-bold.t-outro .c-title .hl { background: var(--outro-hl-bg); color: var(--outro-hl-fg); padding: 0 0.1em; }
 .d-bold.t-outro .c-avatar { background: #111; }
 
 /* ==========================================================

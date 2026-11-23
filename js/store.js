@@ -44,6 +44,7 @@
     { c: "#b8933f", n: "앤틱 골드" },
     { c: "#b0665a", n: "테라코타" },
     { c: "#b9868a", n: "더스티 로즈" },
+    { c: "#c9768c", n: "가든 로즈" },
     { c: "#7b2e3a", n: "버건디" },
     { c: "#2e3f5c", n: "네이비" },
     { c: "#3d6b7d", n: "딥 틸" },
@@ -84,6 +85,8 @@
       imageDim: 35,        // 배경 사진 어둡게 (%)
       series: { name: "", no: 1 },   // 시리즈 표지 (예: 부의 정원 노트 No.03)
       splitTags: false,    // 해시태그를 첫 댓글로 분리
+      brandPhoto: "",      // 부의 정원 대표 사진 dataURL
+      autoCoverPhoto: false, // 새 카드뉴스 표지에 대표 사진 자동 넣기
       cards: [],
       caption: "",
       active: 0,
@@ -301,7 +304,7 @@
       const s = Store.state;
       const keep = {
         account: s.account, accent: s.accent, design: s.design, ratio: s.ratio, avatar: s.avatar, titleFont: s.titleFont, align: s.align,
-        category: s.category, tone: s.tone, splitTags: s.splitTags,
+        category: s.category, tone: s.tone, splitTags: s.splitTags, brandPhoto: s.brandPhoto, autoCoverPhoto: s.autoCoverPhoto, imageDim: s.imageDim,
         // 시리즈를 쓰는 중이면 다음 편 번호로
         series: { name: s.series.name, no: s.series.name && s.cards.length ? (s.series.no | 0) + 1 : s.series.no },
       };

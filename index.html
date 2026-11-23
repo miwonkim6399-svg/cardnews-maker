@@ -107,6 +107,21 @@
         </div>
         <button class="btn link xs" id="btnAvatarClear" type="button" hidden>프로필 사진 빼기</button>
         <div class="field">
+          <span class="field-label">🌹 부의 정원 대표 사진 <small class="muted">표지 배경 · 프로필로 쓰는 나만의 사진</small></span>
+          <div class="brand-photo-row">
+            <label class="brand-photo" title="대표 사진 고르기">
+              <input type="file" id="inBrandPhoto" accept="image/*" hidden />
+              <span id="brandPhotoPreview">＋ 사진 고르기</span>
+            </label>
+            <div class="stack-8 grow">
+              <button class="btn outline sm" id="btnBrandToCover" type="button" disabled>지금 표지에 넣기</button>
+              <button class="btn ghost sm" id="btnBrandToAvatar" type="button" disabled>프로필 사진으로 쓰기</button>
+              <button class="btn link xs" id="btnBrandClear" type="button" hidden>대표 사진 빼기</button>
+            </div>
+          </div>
+          <label class="toggle"><input type="checkbox" id="inAutoCover" /><span>새로 만드는 카드뉴스 <b>표지에 자동으로</b> 넣기</span></label>
+        </div>
+        <div class="field">
           <span class="field-label">대표 색 <small class="muted" id="accentName"></small></span>
           <div class="swatches" id="accentSwatches"></div>
         </div>
