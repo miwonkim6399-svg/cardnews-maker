@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>카드뉴스메이커 사용법</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" />
+<style>
+  :root { --bg:#f3eee4; --paper:#fffcf6; --ink:#2b2823; --ink2:#57503f; --muted:#968c79; --line:#e6ddcd; --brand:#3f5a4a; --gold:#b39a5e; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Pretendard Variable",Pretendard,"Malgun Gothic",sans-serif; font-size:16px; line-height:1.75; }
+  .wrap { max-width:860px; margin:0 auto; padding:40px 20px 80px; }
+  header { text-align:center; padding:30px 0 34px; border-bottom:1px solid var(--line); margin-bottom:30px; }
+  header .mark { width:56px; height:56px; border-radius:50%; background:var(--brand); color:#e9d9a8; display:inline-grid; place-items:center; font-size:28px; }
+  header small { display:block; margin-top:14px; font-family:"Gowun Batang",serif; color:var(--gold); letter-spacing:.12em; }
+  h1 { font-family:"Gowun Batang",serif; font-size:32px; margin:4px 0 8px; }
+  header p { color:var(--ink2); margin:0; }
+  nav.toc { background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:18px 22px; margin-bottom:28px; }
+  nav.toc b { font-family:"Gowun Batang",serif; }
+  nav.toc ol { margin:8px 0 0; padding-left:22px; columns:2; column-gap:30px; }
+  nav.toc a { color:var(--brand); text-decoration:none; }
+  section { background:var(--paper); border:1px solid var(--line); border-radius:18px; padding:26px 28px; margin-bottom:22px; box-shadow:0 8px 24px rgba(60,45,20,.05); }
+  h2 { font-family:"Gowun Batang",serif; font-size:23px; margin:0 0 12px; display:flex; align-items:center; gap:12px; }
+  h2 .n { width:32px; height:32px; border-radius:50%; border:1.5px solid var(--gold); color:var(--gold); display:inline-grid; place-items:center; font-size:15px; flex:none; }
+  h3 { font-size:17px; margin:20px 0 6px; color:var(--brand); }
+  ol li, ul li { margin:4px 0; }
+  .btn { display:inline-block; background:#efe8da; border:1px solid var(--line); border-radius:8px; padding:0 8px; font-weight:700; font-size:14px; color:var(--ink); white-space:nowrap; }
+  .btn.g { background:var(--brand); color:#fff; border-color:var(--brand); }
+  .tip { background:#eef2ea; border-left:4px solid var(--brand); padding:12px 16px; border-radius:0 10px 10px 0; margin:14px 0 0; font-size:15px; }
+  .warn { background:#f8eee6; border-left:4px solid #b0665a; padding:12px 16px; border-radius:0 10px 10px 0; margin:14px 0 0; font-size:15px; }
+  table { width:100%; border-collapse:collapse; margin-top:8px; font-size:15px; }
+  th, td { border-bottom:1px solid var(--line); padding:9px 8px; text-align:left; vertical-align:top; }
+  th { color:var(--ink2); font-weight:700; background:#f8f3e9; }
+  code { background:#f1ebde; padding:1px 6px; border-radius:6px; font-size:14px; }
+  a { color:var(--brand); }
+  footer { text-align:center; color:var(--muted); font-size:14px; margin-top:30px; }
+  @media (max-width:600px) { nav.toc ol { columns:1; } section { padding:20px 18px; } h1 { font-size:26px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="mark">❦</span>
+    <small>아름다운 부의 정원</small>
+    <h1>카드뉴스메이커 사용법</h1>
+    <p>관심사와 주제만 고르면, 고상한 인스타그램 카드뉴스와 캡션이 완성돼요.</p>
+  </header>
+
+  <nav class="toc">
+    <b>목차</b>
+    <ol>
+      <li><a href="#open">사이트 여는 법</a></li>
+      <li><a href="#make">카드뉴스 만들기</a></li>
+      <li><a href="#design">디자인 · 나의 브랜드</a></li>
+      <li><a href="#edit">카드 고치기 · 사진 넣기</a></li>
+      <li><a href="#save">폴더에 저장하기</a></li>
+      <li><a href="#insta">인스타그램에 올리기</a></li>
+      <li><a href="#library">내 보관함 · 되돌리기</a></li>
+      <li><a href="#interest">관심사별 추천 조합</a></li>
+      <li><a href="#account">인스타그램 계정 관리</a></li>
+      <li><a href="#faq">자주 묻는 질문</a></li>
+    </ol>
+  </nav>
+
+  <section id="open">
+    <h2><span class="n">1</span>사이트 여는 법</h2>
+    <table>
+      <tr><th>어디서</th><th>방법</th></tr>
+      <tr><td>휴대폰 · 어느 컴퓨터든</td><td><a href="https://miwonkim6399-svg.github.io/cardnews-maker/">https://miwonkim6399-svg.github.io/cardnews-maker/</a><br>휴대폰에서는 <b>홈 화면에 추가</b>해 두면 앱처럼 쓸 수 있어요.<br>(아이폰: 사파리 공유 버튼 → 홈 화면에 추가 / 갤럭시: 크롬 ⋮ → 홈 화면에 추가)</td></tr>
+      <tr><td>내 컴퓨터</td><td>바탕화면 <code>방이동 공부모임 결과 → 블로그, 카드뉴스,홈페이지 자동화</code> 폴더의 <code>index.html</code>을 더블클릭</td></tr>
+    </table>
+    <div class="tip">💡 작업 내용은 <b>쓰는 브라우저 안에 자동 저장</b>돼요. 컴퓨터에서 만든 작업은 휴대폰에서 보이지 않으니, 한 기기에서 끝까지 만드는 게 편해요.</div>
+  </section>
+
+  <section id="make">
+    <h2><span class="n">2</span>카드뉴스 만들기</h2>
+    <ol>
+      <li><b>관심사</b>를 고르세요. 일상 정보 · 부동산 · 프랑스 자수 · 여행 · 독서 · 식물 키우기 · 산책 중에서 고르면, <b>어울리는 디자인과 색이 자동으로</b> 골라져요.</li>
+      <li><b>추천 주제</b>를 누르거나 <b>주제</b> 칸에 직접 쓰세요. (예: 몬스테라 잘 키우는 법)</li>
+      <li><b>말투</b>와 <b>카드 수</b>(5 · 7 · 9장)를 고르세요.</li>
+      <li><b>작성 방식</b>
+        <ul>
+          <li><b>기본 문구</b>: 키 없이 바로 만들어져요. 관심사에 맞춘 문구가 들어가요.</li>
+          <li><b>AI 작성</b>: 주제에 딱 맞는 실제 내용을 써 줘요. 오른쪽 위 <span class="btn">⚙</span> 설정에 Anthropic API 키를 넣어야 해요 (사용한 만큼 요금이 나가요).</li>
+        </ul>
+      </li>
+      <li><span class="btn g">카드뉴스 만들기</span>를 누르면 카드와 <b>인스타그램 캡션</b>이 함께 완성돼요.</li>
+    </ol>
+  </section>
+
+  <section id="design">
+    <h2><span class="n">3</span>디자인 · 나의 브랜드</h2>
+    <h3>디자인 10가지</h3>
+    <table>
+      <tr><th>디자인</th><th>느낌</th><th>잘 어울리는 주제</th></tr>
+      <tr><td>클래식</td><td>아이보리 · 금빛 이중 괘선 · 명조</td><td>일상 정보, 명언, 공지</td></tr>
+      <tr><td>가든</td><td>세이지 톤 · 아치 프레임 · 잎사귀</td><td>식물 키우기, 산책</td></tr>
+      <tr><td>린넨</td><td>따뜻한 베이지 · 바느질 테두리</td><td>프랑스 자수, 손뜨개, 핸드메이드</td></tr>
+      <tr><td>트래블 저널</td><td>엽서 · 우표 · 점선</td><td>여행 코스, 여행 준비물</td></tr>
+      <tr><td>북 노트</td><td>책 페이지 · 책등 · 인용부호</td><td>독서 기록, 문장 수집</td></tr>
+      <tr><td>프라퍼티</td><td>네이비 헤더 · 리포트형</td><td>부동산, 재테크, 숫자 정보</td></tr>
+      <tr><td>포토</td><td>사진을 꽉 채운 배경</td><td>여행 사진, 자수 완성작, 식물 사진</td></tr>
+      <tr><td>에디토리얼 · 소프트모던 · 볼드탑</td><td>매거진 · 파스텔 · 강렬한 제목</td><td>상황에 따라 자유롭게</td></tr>
+    </table>
+    <h3>나의 브랜드 (한 번 설정하면 계속 유지)</h3>
+    <ul>
+      <li><b>프로필 사진</b>: 동그란 <span class="btn">＋</span>를 눌러 얼굴 사진이나 로고를 넣으면 모든 카드 아래 계정명 옆에 표시돼요.</li>
+      <li><b>인스타그램 계정명</b>: <code>@buccaneerscholar</code>가 기본으로 들어가 있어요.</li>
+      <li><b>대표 색</b>: 포레스트 · 세이지 · 앤틱 골드 · 테라코타 · 더스티 로즈 · 버건디 · 네이비 · 딥 틸 · 라벤더 등. 무지개 동그라미로 직접 고를 수도 있어요.</li>
+      <li><b>제목 글꼴</b>: 명조 · 고운바탕 · 나눔명조 · 고딕 · 고운돋움 · 손글씨</li>
+      <li><b>정렬</b>: 기본(디자인에 맞게) · 왼쪽 · 가운데</li>
+      <li><b>크기 비율</b>: 인스타 피드는 <b>4:5</b>를 추천해요. 스토리는 9:16.</li>
+    </ul>
+  </section>
+
+  <section id="edit">
+    <h2><span class="n">4</span>카드 고치기 · 사진 넣기</h2>
+    <ul>
+      <li>미리보기 아래 작은 카드를 누르거나 <span class="btn">‹</span> <span class="btn">›</span>로 넘기면서, 오른쪽 <b>카드 편집</b>에서 라벨 · 제목 · 본문을 고쳐요.</li>
+      <li>제목에서 강조하고 싶은 단어를 <code>*별표*</code>로 감싸면 대표 색으로 바뀌어요. 예: <code>물주기 *기준*</code></li>
+      <li><b>배경 사진</b>: <span class="btn">🖼 사진 넣기</span>로 여행 · 식물 · 자수 사진을 넣으면 사진 위에 흰 글씨로 바뀌어요. <b>사진 어둡게</b> 막대로 글씨를 또렷하게 조절하고, <span class="btn">표지에도 쓰기</span>로 같은 사진을 표지에 넣을 수 있어요.</li>
+      <li><b>카드 정리</b>: <span class="btn">‹ ›</span> 순서 바꾸기 · <span class="btn">⧉</span> 복제 · <span class="btn">＋</span> 추가 · <span class="btn">🗑</span> 삭제 (최대 10장)</li>
+      <li><b>이 카드만 다른 색</b>: 예를 들어 마지막 장만 파란색으로 만들 수 있어요.</li>
+      <li><span class="btn">인스타 미리보기</span>: 실제 인스타그램 게시물과 프로필 그리드에서 어떻게 보일지 확인해요.</li>
+    </ul>
+  </section>
+
+  <section id="save">
+    <h2><span class="n">5</span>폴더에 저장하기</h2>
+    <ol>
+      <li>오른쪽 <b>저장 · 올리기</b>에서 <span class="btn g">📁 내 폴더에 저장</span>을 누르세요.</li>
+      <li>처음 한 번은 저장할 폴더를 고르는 창이 떠요. <code>블로그, 카드뉴스,홈페이지 자동화 → 인스타그램_업로드</code> 폴더를 고르고 <b>폴더 선택 → 파일 수정 허용</b>을 누르세요.</li>
+      <li>다음부터는 버튼만 누르면 그 폴더 안에 <code>2026-11-23_주제</code> 같은 새 폴더가 생기고, 카드 PNG와 <code>캡션.txt</code>가 저장돼요.</li>
+    </ol>
+    <div class="tip">💡 폴더 바로 저장은 <b>PC의 크롬 · 엣지</b>에서 돼요. 휴대폰이나 다른 브라우저에서는 <span class="btn">전체 카드 ZIP으로 받기</span>로 받아 압축을 풀면 돼요.</div>
+  </section>
+
+  <section id="insta">
+    <h2><span class="n">6</span>인스타그램에 올리기</h2>
+    <p><b>폴더에 저장된 이미지는 바로 인스타그램에 올릴 수 있어요.</b> GitHub 사이트는 휴대폰에서도 쓸 수 있게 해 주는 주소이고, 이미지 파일은 폴더에 있으니 그대로 쓰면 돼요.</p>
+    <h3>PC에서 (폴더 이미지로)</h3>
+    <ol>
+      <li>instagram.com 에 <b>@buccaneerscholar</b>로 로그인돼 있는지 확인하세요. (왼쪽 아래 프로필 사진)</li>
+      <li>왼쪽 <b>만들기(＋)</b> → <b>컴퓨터에서 선택</b> → 저장된 폴더에서 카드 이미지를 <b>Ctrl+A로 한꺼번에</b> 선택하세요. 파일 이름 순서가 카드 순서예요.</li>
+      <li>자르기 화면에서 비율을 <b>원본(또는 4:5)</b>으로 맞추고 <b>다음</b>을 누르세요.</li>
+      <li>⭐ <b>문구 입력 칸</b>에 캡션을 붙여넣으세요. 사이트의 <span class="btn">캡션 복사</span>를 누르거나, 폴더의 <code>캡션.txt</code>를 열어 <b>내용</b>을 Ctrl+A → Ctrl+C로 복사한 뒤 문구 칸에 Ctrl+V 하세요.</li>
+      <li><b>공유하기</b>를 누르면 끝!</li>
+    </ol>
+    <div class="warn">⚠ 파일 <code>캡션.txt</code> 자체를 복사하면 파일 이름만 들어가요. 꼭 파일을 <b>열어서 안의 글</b>을 복사하세요.</div>
+    <h3>휴대폰에서 (가장 간단)</h3>
+    <ol>
+      <li>휴대폰 인스타그램 앱이 <b>@buccaneerscholar</b> 계정인지 확인하세요.</li>
+      <li>휴대폰으로 사이트를 열고 카드를 만든 뒤 <span class="btn">내 인스타그램에 올리기</span>를 누르세요.</li>
+      <li><b>Instagram으로 공유</b> → 공유창에서 <b>Instagram → 피드</b>를 고르세요. 캡션은 자동 복사돼 있어요.</li>
+      <li>문구 칸을 길게 눌러 <b>붙여넣기</b> → 공유!</li>
+    </ol>
+    <h3>이미 올렸는데 캡션을 빠뜨렸다면</h3>
+    <p>게시물을 열고 오른쪽 위 <b>⋯ → 수정</b> → 문구 칸에 붙여넣기 → <b>완료</b>. 다시 올릴 필요 없어요.</p>
+  </section>
+
+  <section id="library">
+    <h2><span class="n">7</span>내 보관함 · 되돌리기</h2>
+    <ul>
+      <li><span class="btn">📚 이 작품을 보관함에 저장</span>: 만든 카드뉴스를 보관해 두고, 상단 <span class="btn">📚 내 보관함</span>에서 다시 열거나 복사해서 비슷한 새 작품을 만들 수 있어요.</li>
+      <li><span class="btn">↶</span> 되돌리기 · <span class="btn">↷</span> 다시하기 (키보드 Ctrl+Z / Ctrl+Y). 실수로 카드를 지워도 되살릴 수 있어요.</li>
+      <li><span class="btn">✚ 새로 만들기</span>: 지금 작업을 비우고 새로 시작해요. 브랜드 설정(계정명 · 프로필 · 색 · 글꼴)은 그대로예요. 남기고 싶은 작업은 먼저 보관함에 저장하세요.</li>
+    </ul>
+  </section>
+
+  <section id="interest">
+    <h2><span class="n">8</span>관심사별 추천 조합</h2>
+    <table>
+      <tr><th>관심사</th><th>디자인 · 색</th><th>추천 주제 예시</th><th>팁</th></tr>
+      <tr><td>부동산</td><td>프라퍼티 · 네이비</td><td>청약 가점 높이는 방법, 전세 계약 전 체크리스트</td><td>숫자는 출처(국토부 실거래가 등)를 캡션에 함께 적으면 신뢰가 올라가요.</td></tr>
+      <tr><td>프랑스 자수</td><td>린넨 · 테라코타</td><td>입문 준비물, 기본 스티치</td><td>완성작 사진을 표지에 넣고 포토 디자인도 써 보세요.</td></tr>
+      <tr><td>여행</td><td>트래블 저널 · 딥 틸</td><td>파리 3박 4일 산책 여행, 제주 동쪽 코스</td><td>9장으로 하루 코스를 시간 순서로 정리하면 저장이 많이 돼요.</td></tr>
+      <tr><td>독서</td><td>북 노트 · 버건디</td><td>이번 달 읽은 책, 인생 문장 다섯 줄</td><td>「마음에 남은 문장」 카드에 실제 밑줄 문장을 적어 주세요.</td></tr>
+      <tr><td>식물 키우기</td><td>가든 · 세이지</td><td>몬스테라 잘 키우는 법, 겨울철 관리</td><td>우리 집 식물 사진을 배경으로 넣으면 훨씬 생생해요.</td></tr>
+      <tr><td>산책</td><td>가든 · 앤틱 골드</td><td>서울숲 가을 산책 코스, 아침 30분 걷기</td><td>계절 사진 + 짧은 감성 문장이 잘 어울려요. 말투는 「감성적인」을 추천해요.</td></tr>
+    </table>
+    <div class="tip">💡 인스타그램은 <b>꾸준함</b>이 가장 중요해요. 관심사 6가지를 요일별로 정해 두면 소재 걱정이 줄어요. 예: 월 부동산 · 수 자수 · 금 독서 · 주말 여행/산책/식물</div>
+  </section>
+
+  <section id="account">
+    <h2><span class="n">9</span>인스타그램 계정 관리</h2>
+    <h3>앞으로는 @buccaneerscholar 하나만</h3>
+    <p>사이트의 계정명은 <code>@buccaneerscholar</code>로 맞춰져 있어요. 올리기 전에 인스타그램이 <b>@buccaneerscholar로 로그인</b>돼 있는지만 확인하세요. (PC: 왼쪽 아래 ≡ 더 보기 → 계정 전환 / 휴대폰: 프로필 화면 맨 위 계정 이름 누르기)</p>
+    <h3>miwonkim6399 게시물 삭제</h3>
+    <ol>
+      <li>miwonkim6399로 로그인 → 프로필 → 지울 게시물을 여세요.</li>
+      <li>오른쪽 위 <b>⋯</b> → <b>삭제</b> → 한 번 더 <b>삭제</b>.</li>
+      <li>삭제한 게시물은 <b>설정 → 내 활동 → 최근 삭제됨</b>에 30일 동안 보관되고 그 뒤 완전히 사라져요.</li>
+    </ol>
+    <h3>miwonkim6399 계정 삭제</h3>
+    <ol>
+      <li>휴대폰 인스타그램 앱에서 miwonkim6399로 전환 → 프로필 → 오른쪽 위 <b>≡</b> → <b>계정 센터</b>.</li>
+      <li><b>개인정보</b> → <b>계정 소유권 및 관리</b> → <b>비활성화 또는 삭제</b> → <b>miwonkim6399</b> 선택.</li>
+      <li><b>계정 삭제</b>를 고르고 → 이유 선택 → 비밀번호 입력 → <b>계정 삭제</b>.</li>
+      <li>30일 안에 다시 로그인하면 삭제가 취소되고, 30일이 지나면 완전히 삭제돼요.</li>
+    </ol>
+    <div class="warn">⚠ 계정 삭제는 되돌릴 수 없어요 (30일 이후). <b>@buccaneerscholar가 아닌 miwonkim6399를 골랐는지</b> 꼭 확인하세요. 잠시 쉬고 싶다면 「계정 비활성화」를 고르면 나중에 되살릴 수 있어요.</div>
+  </section>
+
+  <section id="faq">
+    <h2><span class="n">10</span>자주 묻는 질문</h2>
+    <h3>사이트가 대신 인스타그램에 올려 주나요?</h3>
+    <p>인스타그램은 로그인한 본인만 올릴 수 있어서, 사이트는 <b>이미지와 캡션을 준비</b>해 주고 마지막 공유 버튼은 직접 누르는 방식이에요. 비즈니스 계정이라면 「자동 게시(고급)」 설정으로 버튼 한 번에 올리는 것도 가능해요 (README.md 참고).</p>
+    <h3>휴대폰에서 만든 작업이 컴퓨터에서 안 보여요.</h3>
+    <p>작업은 각 브라우저에 따로 저장돼요. 한 기기에서 끝까지 만들거나, 완성 이미지를 폴더/ZIP으로 저장해 두세요.</p>
+    <h3>글자가 카드에서 넘쳐요.</h3>
+    <p>글이 길면 글자 크기가 자동으로 줄어들어요. 그래도 답답하면 본문을 2~3줄로 줄이거나 카드를 하나 더 추가해 나눠 주세요.</p>
+    <h3>사진을 넣었더니 글씨가 잘 안 보여요.</h3>
+    <p><b>사진 어둡게</b> 막대를 오른쪽으로 옮기세요 (40~55% 추천).</p>
+    <h3>사이트를 고치고 싶어요.</h3>
+    <p>Claude에게 "카드뉴스메이커 ○○ 바꿔줘"라고 말하면 고쳐서 GitHub에 다시 올려 줘요. 1~2분 뒤 같은 주소에 반영돼요.</p>
+  </section>
+
+  <footer>아름다운 부의 정원 카드뉴스메이커 · <a href="index.html">카드뉴스 만들러 가기 →</a></footer>
+</div>
+</body>
+</html>

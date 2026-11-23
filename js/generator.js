@@ -164,11 +164,26 @@
 
   function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
-  function generate({ topic, tone, count }) {
+  const CAT_PICK = { 3: [0, 2, 5], 5: [0, 1, 2, 4, 5], 7: [0, 1, 2, 3, 4, 5, 6] };
+
+  function generateCategory(cat, t, n, vars) {
+    const cards = [];
+    const blank = (x) => ({ label: x[0], title: fill(x[1], vars), body: fill(x[2], vars), accent: "", image: "" });
+    cards.push({ label: cat.cover.label, title: fill(pick(cat.cover.titles), vars), body: fill(cat.cover.body, vars), accent: "", image: "" });
+    const contentCount = n - 2;
+    const idx = CAT_PICK[contentCount] || Array.from({ length: contentCount }, (_, i) => i % cat.angles.length);
+    idx.forEach((i) => cards.push(blank(cat.angles[i])));
+    cards.push(blank(cat.outro));
+    return { cards };
+  }
+
+  function generate({ topic, tone, count, category }) {
     const t = (topic || "").trim() || "나만의 주제";
     const tpl = T[tone] || T.friendly;
     const n = count || 7;
     const vars = { t, n };
+    const cat = window.Categories && window.Categories[category];
+    if (cat && cat.angles) return generateCategory(cat, t, n, vars);
     const cards = [];
 
     cards.push({
@@ -225,15 +240,17 @@
       .filter(Boolean)
       .map((x) => `${tpl.bullet} ${x}`)
       .join("\n");
-    const parts = [fill(tpl.hook, vars), fill(tpl.intro, vars)];
+    const cat = window.Categories && window.Categories[state.category];
+    const hook = cat && cat.hook ? cat.hook : tpl.hook;
+    const parts = [fill(hook, vars), fill(tpl.intro, vars)];
     if (bullets) parts.push(bullets);
     parts.push(tpl.cta);
-    parts.push(hashtags(state.topic).join(" "));
+    parts.push(hashtags(state.topic, cat ? cat.tags : []).join(" "));
     return parts.join("\n\n");
   }
 
   function blankCard() {
-    return { label: "POINT", title: "새 카드 *제목*", body: "본문 내용을 입력하세요.", accent: "" };
+    return { label: "POINT", title: "새 카드 *제목*", body: "본문 내용을 입력하세요.", accent: "", image: "" };
   }
 
   window.Generator = { generate, caption, hashtags, blankCard, josa, plain };

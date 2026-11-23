@@ -4,3 +4,6 @@ node_modules/
 .DS_Store
 Thumbs.db
 인스타그램_업로드/
+
+# 블로그 자동화 폴더(API Key.txt 포함)는 카드뉴스 저장소에 올리지 않음 — 별도 저장소 blog-studio
+블로그 자동화(최종)/

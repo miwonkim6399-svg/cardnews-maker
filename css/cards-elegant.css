@@ -1,0 +1,207 @@
+/* ==========================================================
+   공통 확장: 배경 사진 · 글꼴 · 정렬 · 프로필 사진
+   ========================================================== */
+.card .c-bg { position: absolute; inset: 0; background-size: cover; background-position: center; z-index: 0; }
+.card .c-dim { position: absolute; inset: 0; background: #000; opacity: var(--dim); z-index: 0; }
+.card .c-avatar.has-photo { background-size: cover; background-position: center; display: inline-block; }
+.d-edit .c-avatar.has-photo { width: 52px; height: 52px; border-radius: 50%; }
+.card.has-font .c-title { font-family: var(--title-font) !important; }
+.card.font-hand .c-title { letter-spacing: 0 !important; line-height: 1.12 !important; font-size: calc(var(--fs) * 118px) !important; }
+.card.font-hand.t-cover .c-title { font-size: calc(var(--fs) * 150px) !important; }
+
+.card.al-center .c-main { align-items: center; text-align: center; }
+.card.al-center .c-rule { margin-left: auto !important; margin-right: auto !important; }
+.card.al-left .c-main { align-items: flex-start; text-align: left; }
+.card.al-left .c-rule { margin-left: 0 !important; margin-right: 0 !important; }
+
+/* 사진이 있는 카드: 디자인과 상관없이 사진 위에 흰 글씨 */
+.card.has-img:not(.d-photo) .c-deco { display: none; }
+.card.has-img:not(.d-photo) { color: #fff !important; background: #222 !important; }
+.card.has-img:not(.d-photo) .c-body,
+.card.has-img:not(.d-photo) .c-page,
+.card.has-img:not(.d-photo) .c-account,
+.card.has-img:not(.d-photo) .c-swipe,
+.card.has-img:not(.d-photo) .c-num { color: #fff !important; }
+.card.has-img:not(.d-photo) .c-top,
+.card.has-img:not(.d-photo) .c-foot { border-color: rgba(255, 255, 255, .7) !important; }
+.card.has-img:not(.d-photo) .c-title .hl { color: #f3dfa2 !important; background: none !important; box-shadow: none !important; }
+.card.has-img:not(.d-photo) .c-rule { background: #fff !important; border-color: #fff !important; }
+.card.has-img .c-title, .card.has-img .c-body { text-shadow: 0 2px 18px rgba(0, 0, 0, .28); }
+
+/* ==========================================================
+   클래식 — 아이보리 · 금빛 이중 괘선 · 세리프 (가운데 정렬)
+   ========================================================== */
+.d-classic { background: #f7f2e8; color: #2b2620; --gold: #b39a5e; --pad-x: 130px; --pad-y: 120px; }
+.d-classic .dk3 { inset: 44px; border: 2px solid var(--gold); }
+.d-classic .dk1 { inset: 58px; border: 1px solid var(--gold); opacity: .7; }
+.d-classic .dk2 { left: 0; right: 0; bottom: 18px; text-align: center; font-size: 40px; color: var(--gold); }
+.d-classic .c-top { justify-content: center; flex-direction: column; gap: 10px; }
+.d-classic .c-label { font-family: "Noto Serif KR", serif; font-size: 26px; font-weight: 600; letter-spacing: .32em; color: var(--accent); text-transform: uppercase; }
+.d-classic .c-page { font-family: "Noto Serif KR", serif; font-size: 22px; letter-spacing: .2em; color: #8a7f6c; }
+.d-classic .c-main { justify-content: center; align-items: center; text-align: center; padding: 40px 0; }
+.d-classic .c-num { font-family: "Noto Serif KR", serif; font-size: calc(var(--fs) * 54px); font-weight: 600; color: var(--gold); margin-bottom: 30px; letter-spacing: .1em; }
+.d-classic .c-title { font-family: "Gowun Batang", "Noto Serif KR", serif; font-size: calc(var(--fs) * 84px); font-weight: 700; line-height: 1.38; letter-spacing: -0.02em; }
+.d-classic .hl { color: var(--accent); }
+.d-classic .c-rule { width: 140px; height: 1px; background: var(--gold); margin: calc(var(--fs) * 52px) auto calc(var(--fs) * 44px); flex: none; }
+.d-classic .c-body { font-family: "Gowun Batang", "Noto Serif KR", serif; font-size: calc(var(--fs) * 38px); line-height: 1.85; color: #5a5245; }
+.d-classic .c-foot { justify-content: center; }
+.d-classic .c-swipe { display: none; }
+.d-classic .c-account { font-family: "Noto Serif KR", serif; font-size: 26px; letter-spacing: .12em; color: #6c6352; }
+.d-classic .c-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--gold); }
+.d-classic.t-cover .c-title { font-size: calc(var(--fs) * 112px); line-height: 1.3; }
+.d-classic.t-cover, .d-classic.t-outro { background: var(--accent); color: var(--on-accent); }
+.d-classic.t-cover .c-body, .d-classic.t-outro .c-body,
+.d-classic.t-cover .c-account, .d-classic.t-outro .c-account,
+.d-classic.t-cover .c-page, .d-classic.t-outro .c-page { color: var(--on-accent); opacity: .85; }
+.d-classic.t-cover .c-label, .d-classic.t-outro .c-label,
+.d-classic.t-cover .hl, .d-classic.t-outro .hl,
+.d-classic.t-cover .dk2, .d-classic.t-outro .dk2 { color: #e9d9a8; }
+.d-classic.t-cover .dk3, .d-classic.t-outro .dk3, .d-classic.t-cover .dk1, .d-classic.t-outro .dk1 { border-color: #e9d9a8; }
+.d-classic.t-cover .c-rule, .d-classic.t-outro .c-rule { background: #e9d9a8; }
+
+/* ==========================================================
+   가든 — 세이지 톤 · 아치 프레임 · 잎사귀
+   ========================================================== */
+.d-garden { background: var(--tint2); color: #2f3a2c; --pad-x: 150px; --pad-y: 150px; }
+.d-garden.r-11 { --pad-y: 120px; }
+.d-garden.r-916 { --pad-y: 260px; }
+.d-garden .dk3 { left: 84px; right: 84px; top: calc(var(--pad-y) - 70px); bottom: calc(var(--pad-y) - 70px); background: #fdfbf5; border-radius: 460px 460px 28px 28px; }
+.d-garden .dk1 { width: 230px; height: 110px; border-radius: 0 100% 0 100%; background: var(--accent); opacity: .5; left: 30px; bottom: 60px; transform: rotate(-24deg); }
+.d-garden .dk2 { width: 170px; height: 80px; border-radius: 0 100% 0 100%; background: var(--accent); opacity: .3; right: 40px; top: 70px; transform: rotate(150deg); }
+.d-garden .c-top { justify-content: center; flex-direction: column; gap: 8px; padding-top: 70px; }
+.d-garden .c-label { font-family: "Noto Serif KR", serif; font-size: 25px; font-weight: 600; letter-spacing: .28em; color: var(--accent); }
+.d-garden .c-page { font-size: 22px; color: #8c9686; letter-spacing: .1em; }
+.d-garden .c-main { justify-content: center; align-items: center; text-align: center; }
+.d-garden .c-num { width: calc(var(--fs) * 96px); height: calc(var(--fs) * 96px); border-radius: 50%; border: 2px solid var(--accent); color: var(--accent); font-family: "Noto Serif KR", serif; font-size: calc(var(--fs) * 36px); font-weight: 600; display: flex; align-items: center; justify-content: center; margin-bottom: 36px; flex: none; }
+.d-garden .c-title { font-family: "Gowun Batang", "Noto Serif KR", serif; font-size: calc(var(--fs) * 80px); font-weight: 700; line-height: 1.38; letter-spacing: -0.02em; }
+.d-garden .hl { color: var(--accent); }
+.d-garden .c-rule { width: 60px; height: 4px; border-radius: 2px; background: var(--tint3); margin: calc(var(--fs) * 46px) auto calc(var(--fs) * 40px); flex: none; }
+.d-garden .c-body { font-size: calc(var(--fs) * 37px); line-height: 1.8; color: #5d6a58; }
+.d-garden .c-foot { justify-content: center; padding-bottom: 20px; }
+.d-garden .c-swipe { display: none; }
+.d-garden .c-account { font-size: 26px; font-weight: 600; color: #5d6a58; }
+.d-garden .c-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); }
+.d-garden.t-cover .c-title { font-size: calc(var(--fs) * 104px); }
+.d-garden.t-cover, .d-garden.t-outro { background: var(--accent); }
+.d-garden.t-cover .dk1, .d-garden.t-outro .dk1, .d-garden.t-cover .dk2, .d-garden.t-outro .dk2 { background: #fdfbf5; }
+
+/* ==========================================================
+   린넨 — 따뜻한 베이지 · 스티치 테두리 (프랑스 자수)
+   ========================================================== */
+.d-linen { background: #efe6d6; color: #3e342a; --pad-x: 140px; --pad-y: 140px; }
+.d-linen .dk3 { inset: 52px; border: 5px dashed var(--accent); border-radius: 36px; opacity: .85; }
+.d-linen .dk1 { inset: 70px; border: 1px solid rgba(62, 52, 42, .18); border-radius: 26px; }
+.d-linen .c-label { display: inline-block; background: var(--accent); color: var(--on-accent); font-family: "Noto Serif KR", serif; font-size: 26px; font-weight: 600; letter-spacing: .14em; padding: 12px 30px; border-radius: 6px; }
+.d-linen .c-page { font-family: "Noto Serif KR", serif; font-size: 24px; color: #8a7a66; }
+.d-linen .c-main { justify-content: center; }
+.d-linen .c-num { font-family: "Nanum Pen Script", cursive; font-size: calc(var(--fs) * 84px); color: var(--accent); line-height: 1; margin-bottom: 18px; }
+.d-linen .c-title { font-family: "Noto Serif KR", serif; font-size: calc(var(--fs) * 82px); font-weight: 800; line-height: 1.36; letter-spacing: -0.03em; }
+.d-linen .hl { color: var(--accent); }
+.d-linen .c-rule { width: 180px; height: 0; border-top: 4px dashed var(--accent); margin: calc(var(--fs) * 48px) 0 calc(var(--fs) * 40px); flex: none; }
+.d-linen .c-body { font-size: calc(var(--fs) * 38px); line-height: 1.8; color: #5e5142; }
+.d-linen .c-account { font-size: 26px; font-weight: 700; color: #5e5142; }
+.d-linen .c-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent); }
+.d-linen .c-swipe { font-family: "Nanum Pen Script", cursive; font-size: 40px; color: var(--accent); }
+.d-linen.t-cover .c-title { font-size: calc(var(--fs) * 110px); }
+.d-linen.t-cover .c-main, .d-linen.t-outro .c-main { align-items: center; text-align: center; }
+.d-linen.t-cover .c-rule, .d-linen.t-outro .c-rule { margin-left: auto; margin-right: auto; }
+
+/* ==========================================================
+   트래블 저널 — 엽서 · 우표 · 소인
+   ========================================================== */
+.d-journal { background: var(--tint1); color: #2a3236; --pad-x: 130px; --pad-y: 130px; }
+.d-journal .dk3 { inset: 50px; background: #fffdf8; border: 1px solid #d8d0c2; border-radius: 10px; }
+.d-journal .dk2 { right: 96px; top: 94px; width: 150px; height: 180px; border: 4px dotted var(--accent); color: var(--accent); font-size: 22px; font-weight: 800; letter-spacing: .12em; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 18px; transform: rotate(4deg); z-index: 1; }
+.d-journal .dk1 { right: 136px; top: 120px; width: 70px; height: 70px; border-radius: 50%; background: var(--accent); opacity: .85; z-index: 2; }
+.d-journal .c-top { padding-right: 190px; justify-content: flex-start; gap: 22px; }
+.d-journal .c-label { font-size: 26px; font-weight: 800; letter-spacing: .2em; color: var(--accent); }
+.d-journal .c-page { font-size: 24px; color: #8b9396; letter-spacing: .08em; }
+.d-journal .c-main { padding-top: 110px; }
+.d-journal .c-num { font-size: calc(var(--fs) * 30px); font-weight: 800; letter-spacing: .24em; color: #fff; background: var(--accent); padding: 8px 18px; align-self: flex-start; margin-bottom: 30px; }
+.d-journal.al-center .c-num { align-self: center; }
+.d-journal .c-title { font-family: "Noto Serif KR", serif; font-size: calc(var(--fs) * 84px); font-weight: 800; line-height: 1.34; letter-spacing: -0.03em; }
+.d-journal .hl { color: var(--accent); }
+.d-journal .c-rule { width: 100%; height: 0; border-top: 3px dashed #cfc5b4; margin: calc(var(--fs) * 48px) 0 calc(var(--fs) * 40px); flex: none; }
+.d-journal .c-body { font-size: calc(var(--fs) * 38px); line-height: 1.8; color: #4b5458; }
+.d-journal .c-account { font-size: 26px; font-weight: 700; }
+.d-journal .c-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent); }
+.d-journal .c-swipe { font-size: 26px; font-weight: 700; color: var(--accent); }
+.d-journal.t-cover .c-title { font-size: calc(var(--fs) * 112px); }
+.d-journal.t-cover .c-main { justify-content: flex-end; padding-bottom: 30px; }
+
+/* ==========================================================
+   북 노트 — 책 페이지 · 책등 그림자 · 인용부호
+   ========================================================== */
+.d-book { background: #f4ede1; color: #2e2a25; --pad-x: 150px; --pad-y: 130px; }
+.d-book .dk1 { left: 0; top: 0; bottom: 0; width: 90px; background: linear-gradient(to right, rgba(60, 40, 20, .16), rgba(60, 40, 20, 0)); }
+.d-book .dk3 { left: 0; top: 0; bottom: 0; width: 14px; background: var(--accent); }
+.d-book .dk2 { left: 110px; top: 150px; font-family: "Noto Serif KR", serif; font-size: 420px; line-height: 1; color: var(--accent); opacity: .14; }
+.d-book .c-top { border-bottom: 1px solid rgba(46, 42, 37, .3); padding-bottom: 22px; }
+.d-book .c-label { font-family: "Nanum Myeongjo", "Noto Serif KR", serif; font-size: 26px; font-weight: 700; letter-spacing: .18em; color: var(--accent); }
+.d-book .c-page { font-family: "Nanum Myeongjo", serif; font-size: 24px; color: #8b8274; }
+.d-book .c-main { padding-top: 80px; }
+.d-book .c-num { font-family: "Noto Serif KR", serif; font-size: calc(var(--fs) * 40px); font-style: italic; color: var(--accent); margin-bottom: 26px; }
+.d-book .c-title { font-family: "Nanum Myeongjo", "Noto Serif KR", serif; font-size: calc(var(--fs) * 80px); font-weight: 800; line-height: 1.42; letter-spacing: -0.02em; }
+.d-book .hl { color: var(--accent); }
+.d-book .c-rule { width: 70px; height: 3px; background: var(--accent); margin: calc(var(--fs) * 50px) 0 calc(var(--fs) * 42px); flex: none; }
+.d-book .c-body { font-family: "Nanum Myeongjo", "Noto Serif KR", serif; font-size: calc(var(--fs) * 38px); line-height: 1.95; color: #4f483e; }
+.d-book .c-foot { border-top: 1px solid rgba(46, 42, 37, .3); padding-top: 22px; }
+.d-book .c-account { font-family: "Nanum Myeongjo", serif; font-size: 26px; font-weight: 700; }
+.d-book .c-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); }
+.d-book .c-swipe { font-family: "Noto Serif KR", serif; font-style: italic; font-size: 26px; color: #8b8274; }
+.d-book.t-cover { background: var(--accent); color: #f6efe2; }
+.d-book.t-cover .dk3 { background: #e9d9a8; }
+.d-book.t-cover .c-top, .d-book.t-cover .c-foot { border-color: rgba(246, 239, 226, .5); }
+.d-book.t-cover .c-label, .d-book.t-cover .hl { color: #e9d9a8; }
+.d-book.t-cover .c-page, .d-book.t-cover .c-body, .d-book.t-cover .c-swipe { color: #efe4cf; }
+.d-book.t-cover .c-rule { background: #e9d9a8; }
+.d-book.t-cover .c-main { justify-content: center; }
+.d-book.t-cover .c-title { font-size: calc(var(--fs) * 108px); }
+
+/* ==========================================================
+   프라퍼티 — 네이비 헤더 · 리포트형 (부동산)
+   ========================================================== */
+.d-estate { background: #f6f7f9; color: #1d2433; }
+.d-estate .dk1 { left: 0; right: 0; top: 0; height: calc(var(--pad-y) + 74px); background: var(--accent); }
+.d-estate .c-top { color: var(--on-accent); }
+.d-estate .c-label { font-size: 28px; font-weight: 800; letter-spacing: .14em; }
+.d-estate .c-page { font-size: 26px; font-weight: 600; opacity: .85; }
+.d-estate .c-main { padding-top: 120px; }
+.d-estate .c-num { font-size: calc(var(--fs) * 34px); font-weight: 800; color: var(--accent); border: 3px solid var(--accent); padding: 6px 18px; align-self: flex-start; margin-bottom: 34px; letter-spacing: .08em; }
+.d-estate.al-center .c-num { align-self: center; }
+.d-estate .c-title { font-size: calc(var(--fs) * 88px); font-weight: 800; line-height: 1.28; letter-spacing: -0.04em; }
+.d-estate .hl { color: var(--accent); }
+.d-estate .c-rule { width: 100%; height: 2px; background: #1d2433; margin: calc(var(--fs) * 50px) 0 calc(var(--fs) * 42px); flex: none; }
+.d-estate .c-body { font-size: calc(var(--fs) * 39px); line-height: 1.72; color: #444d5e; font-weight: 500; }
+.d-estate .c-foot { border-top: 1px solid #d3d8e1; padding-top: 26px; }
+.d-estate .c-account { font-size: 27px; font-weight: 800; }
+.d-estate .c-avatar { width: 46px; height: 46px; border-radius: 8px; background: var(--accent); }
+.d-estate .c-swipe { font-size: 26px; font-weight: 700; color: var(--accent); }
+.d-estate.t-cover, .d-estate.t-outro { background: var(--accent); color: var(--on-accent); }
+.d-estate.t-cover .dk1, .d-estate.t-outro .dk1 { background: var(--shade); }
+.d-estate.t-cover .c-foot, .d-estate.t-outro .c-foot { border-color: rgba(255, 255, 255, .3); }
+.d-estate.t-cover .c-body, .d-estate.t-outro .c-body, .d-estate.t-cover .c-swipe, .d-estate.t-outro .c-swipe { color: var(--on-accent); opacity: .88; }
+.d-estate.t-cover .hl, .d-estate.t-outro .hl { color: #e9d9a8; }
+.d-estate.t-cover .c-rule, .d-estate.t-outro .c-rule { background: #e9d9a8; width: 120px; }
+.d-estate.t-cover .c-avatar, .d-estate.t-outro .c-avatar { background: #e9d9a8; }
+.d-estate.t-cover .c-title { font-size: calc(var(--fs) * 116px); }
+.d-estate.t-cover .c-main, .d-estate.t-outro .c-main { justify-content: center; padding-top: 60px; }
+
+/* ==========================================================
+   포토 — 사진 전면 + 아래쪽 그라데이션 (사진이 없으면 색 그라데이션)
+   ========================================================== */
+.d-photo { background: linear-gradient(160deg, var(--accent) 0%, var(--shade) 100%); color: #fff; }
+.d-photo .dk3 { inset: 0; background: linear-gradient(to bottom, rgba(0, 0, 0, .25) 0%, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, .15) 55%, rgba(0, 0, 0, .72) 100%); }
+.d-photo .c-label { font-size: 26px; font-weight: 700; letter-spacing: .16em; border: 2px solid rgba(255, 255, 255, .85); padding: 10px 22px; }
+.d-photo .c-page { font-size: 26px; font-weight: 600; }
+.d-photo .c-main { justify-content: flex-end; padding-bottom: 20px; }
+.d-photo .c-num { font-family: "Noto Serif KR", serif; font-size: calc(var(--fs) * 40px); font-style: italic; margin-bottom: 22px; opacity: .9; }
+.d-photo .c-title { font-family: "Noto Serif KR", serif; font-size: calc(var(--fs) * 88px); font-weight: 800; line-height: 1.32; letter-spacing: -0.03em; text-shadow: 0 2px 24px rgba(0, 0, 0, .3); }
+.d-photo .hl { color: #f3dfa2; }
+.d-photo .c-rule { width: 90px; height: 3px; background: #fff; margin: calc(var(--fs) * 40px) 0 calc(var(--fs) * 34px); flex: none; }
+.d-photo .c-body { font-size: calc(var(--fs) * 38px); line-height: 1.72; opacity: .95; text-shadow: 0 2px 16px rgba(0, 0, 0, .35); }
+.d-photo .c-account { font-size: 27px; font-weight: 700; }
+.d-photo .c-avatar { width: 46px; height: 46px; border-radius: 50%; background: rgba(255, 255, 255, .85); }
+.d-photo .c-swipe { font-size: 26px; font-weight: 700; }
+.d-photo.t-cover .c-title { font-size: calc(var(--fs) * 118px); }
+.d-photo.has-img .c-dim { opacity: calc(var(--dim) * .6); }

@@ -122,10 +122,12 @@
       .slice(0, 15);
   }
 
-  async function generate({ topic, tone, count }) {
+  async function generate({ topic, tone, count, category }) {
     const contentCount = count - 2;
+    const cat = window.Categories && window.Categories[category];
     const prompt = [
       `주제: ${topic}`,
+      cat && category !== "general" ? `분야: ${cat.name} (이 분야를 좋아하는 40~60대 독자에게 고상하고 신뢰감 있게)` : "",
       `말투: ${TONE_GUIDE[tone] || TONE_GUIDE.friendly}`,
       `카드 수: 정확히 ${count}장 (1장 표지 + ${contentCount}장 본문 + 1장 마무리)`,
       "",
@@ -139,7 +141,7 @@
       "- body: 공백 포함 90자 이내, 2~3문장 또는 3줄 이하의 목록(줄바꿈 \\n).",
       "- caption: 인스타그램 게시글 캡션. 첫 줄 훅, 핵심 요약 3~5줄, 저장·공유 유도 문장. 해시태그는 넣지 말 것.",
       "- hashtags: 주제 관련 한국어 해시태그 10~15개 (# 없이 단어만).",
-    ].join("\n");
+    ].filter((line) => line !== null).join("\n");
 
     const data = await callClaude(prompt, CARD_SCHEMA, 16000);
     let cards = (data.cards || []).map((c) => ({
@@ -147,10 +149,12 @@
       title: String(c.title || "").replace(/\\n/g, "\n").trim(),
       body: String(c.body || "").replace(/\\n/g, "\n").trim(),
       accent: "",
+      image: "",
     }));
     if (cards.length > count) cards = cards.slice(0, count);
     while (cards.length < count) cards.splice(cards.length - 1, 0, window.Generator.blankCard());
-    const caption = [String(data.caption || "").trim(), normalizeTags(data.hashtags).join(" ")].filter(Boolean).join("\n\n");
+    const tags = normalizeTags((data.hashtags || []).concat(cat && cat.tags ? cat.tags.slice(0, 4) : []));
+    const caption = [String(data.caption || "").trim(), [...new Set(tags)].slice(0, 15).join(" ")].filter(Boolean).join("\n\n");
     return { cards, caption };
   }
 
