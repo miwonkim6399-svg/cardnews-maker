@@ -111,7 +111,7 @@
     el.innerHTML =
       bg +
       `<div class="c-deco"><span class="dk1"></span><span class="dk2">${decoText(state.design, type, index)}</span><span class="dk3"></span></div>` +
-      `<div class="c-top"><span class="c-label">${escapeHtml(card.label)}</span><span class="c-page">${pad2(index + 1)} / ${pad2(total)}</span></div>` +
+      `<div class="c-top"><span class="c-label">${escapeHtml(card.label)}</span><span class="c-page">${total > 1 ? `${pad2(index + 1)} / ${pad2(total)}` : ""}</span></div>` +
       `<div class="c-main">` +
       seriesBadge +
       (isContent ? `<div class="c-num">${numText(state.design, index)}</div>` : "") +
